@@ -1,0 +1,31 @@
+.max30w {
+  max-width: 30%;
+}
+
+.simple-margin {
+  margin: 1rem;
+}
+
+.button-cstm {
+  min-width: 4rem;
+  color: antiquewhite;
+  max-height: 2rem;
+  min-height: 1.6rem;
+  font-size: 0.7rem;
+  border-radius: 23px;
+  background-color: #ef8157;
+  border: none;
+}
+
+.spaced-orange {
+    letter-spacing: .05rem;
+    color: #ef8157;
+}
+
+.overflow-none {
+  overflow: none;
+}
+
+.even-spacing {
+  justify-content: space-evenly;
+}
