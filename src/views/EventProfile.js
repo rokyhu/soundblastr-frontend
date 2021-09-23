@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -45,8 +44,6 @@ function EventProfile(props) {
     setBandDropdownOpen((prevState) => !prevState);
   const toggleVenueDropdown = () =>
     setVenueDropdownOpen((prevState) => !prevState);
-
-  const history = useHistory();
 
   useEffect(() => {
     axios
@@ -118,7 +115,7 @@ function EventProfile(props) {
   const deleteEvent = (e) => {
     e.preventDefault();
     axios.delete(deleteEventUrl + event.id);
-    history.push("/admin/main");
+    props.onDelete("");
   };
 
   return (
