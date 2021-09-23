@@ -118,7 +118,7 @@ function EventProfile(props) {
   const deleteEvent = (e) => {
     e.preventDefault();
     axios.delete(deleteEventUrl + event.id);
-    history.push("/admin/events");
+    history.push("/admin/main");
   };
 
   return (
