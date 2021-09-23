@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -23,10 +24,12 @@ import {
 const getEventApiUrl = "http://localhost:8080/event/1";
 const getListOfBandsApiUrl = "http://localhost:8080/band/all";
 const getListOfVenuesApiUrl = "http://localhost:8080/venue/all";
-const updateEventUrl = "http://localhost:8080/event/updateId=";
+const updateEventUrl = "http://localhost:8080/event/";
+const deleteEventUrl = "http://localhost:8080/event/1";
 
 function EventProfile() {
-  const [event, setEvent] = useState({ venue: {}, band: {} });
+  const [updatingEvent, setUpdatingEvent] = useState(false);
+  const [event, setEvent] = useState({ venue: { id: 0 }, band: { id: 0 } });
   const [listOfBands, setListOfBands] = useState([]);
   const [listOfVenues, setListOfVenues] = useState([]);
   const [error, setError] = useState({});
@@ -43,6 +46,8 @@ function EventProfile() {
   const toggleVenueDropdown = () =>
     setVenueDropdownOpen((prevState) => !prevState);
 
+  const history = useHistory();
+
   useEffect(() => {
     axios
       .get(getEventApiUrl)
@@ -52,7 +57,14 @@ function EventProfile() {
       .catch((err) => {
         setError(err.message);
       });
-  }, [error.message]);
+  }, [error.message, updatingEvent]);
+
+  useEffect(() => {
+    setBandDropdownSelection(event.band.name);
+    setSelectedBandId(event.band.id);
+    setVenueDropdownSelection(event.venue.name);
+    setSelectedVenueId(event.venue.id);
+  }, [event]);
 
   useEffect(() => {
     axios
@@ -87,19 +99,26 @@ function EventProfile() {
   };
 
   const updateEvent = async (e) => {
+    setUpdatingEvent(false);
     e.preventDefault();
-    console.log(e.target.title.value);
 
     const updatedEvent = {
       title: e.target.title.value,
       date: e.target.date.value,
-      ticketPrice: e.target.price.value,
+      ticketPrice: e.target.ticketPrice.value,
       description: e.target.description.value,
       imageUrl: e.target.imageURL.value,
       bandId: selectedBandId,
       venueId: selectedVenueId,
     };
     await axios.put(updateEventUrl + event.id, updatedEvent);
+    setUpdatingEvent(true);
+  };
+
+  const deleteEvent = (e) => {
+    e.preventDefault();
+    axios.delete(deleteEventUrl);
+    history.push("/admin/events");
   };
 
   return (
@@ -123,7 +142,11 @@ function EventProfile() {
                   </a>
                 </div>
                 <p className="description text-center">{event.description}</p>
-                <p className="description text-center">Price: {event.price}</p>
+                <div className="text-center">
+                  <Button className="btn-round" color="info" type="submit">
+                    {event.ticketPrice} HUF
+                  </Button>
+                </div>
               </CardBody>
               <CardFooter>
                 <hr />
@@ -175,12 +198,14 @@ function EventProfile() {
                     </Col>
                     <Col className="pl-1" md="4">
                       <FormGroup>
-                        <label htmlFor="exampleInputEmail1">Price</label>
+                        <label htmlFor="exampleInputEmail1">
+                          Ticket Price (HUF)
+                        </label>
                         <Input
-                          defaultValue={event.price ? event.price : 0}
-                          placeholder="Price"
-                          type="text"
-                          name="price"
+                          defaultValue={event.ticketPrice}
+                          placeholder="Ticket Price"
+                          type="number"
+                          name="ticketPrice"
                         />
                       </FormGroup>
                     </Col>
@@ -190,9 +215,7 @@ function EventProfile() {
                       <FormGroup>
                         <label>Image URL</label>
                         <Input
-                          defaultValue={
-                            event.imageUrl ? event.imageURL : "null"
-                          }
+                          defaultValue={event.imageUrl}
                           placeholder="Image URL"
                           type="text"
                           name="imageURL"
@@ -202,6 +225,7 @@ function EventProfile() {
                   </Row>
                   <Row>
                     <Col className="pr-1" md="4">
+                      <span>Band:</span>
                       <Dropdown
                         isOpen={bandDropdownOpen}
                         toggle={toggleBandDropdown}
@@ -226,6 +250,7 @@ function EventProfile() {
                       </Dropdown>
                     </Col>
                     <Col className="pr-1" md="4">
+                      <span>Venue:</span>
                       <Dropdown
                         isOpen={venueDropdownOpen}
                         toggle={toggleVenueDropdown}
@@ -273,6 +298,7 @@ function EventProfile() {
                         Update
                       </Button>
                       <Button
+                        onClick={deleteEvent}
                         className="btn-round"
                         color="danger"
                         type="submit"
