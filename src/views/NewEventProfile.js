@@ -78,7 +78,7 @@ function EventProfile() {
   };
 
   const changeSelectedVenue = (e, venue) => {
-    setSelectedVenueId(venue.id - 1000);
+    setSelectedVenueId(venue.id - 1001);
     setVenueDropdownSelection(e.currentTarget.textContent);
   };
 
