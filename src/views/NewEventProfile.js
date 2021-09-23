@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -45,6 +46,7 @@ function EventProfile() {
     setBandDropdownOpen((prevState) => !prevState);
   const toggleVenueDropdown = () =>
     setVenueDropdownOpen((prevState) => !prevState);
+  const history = useHistory();
 
   useEffect(() => {
     var today = new Date();
@@ -103,7 +105,6 @@ function EventProfile() {
 
   const saveNewEvent = async (e) => {
     e.preventDefault();
-    console.log(e.target.title.value);
 
     const newEvent = {
       title: e.target.title.value,
@@ -115,6 +116,7 @@ function EventProfile() {
       venueId: selectedVenue.id,
     };
     await axios.post(saveNewEventURL, newEvent);
+    history.push("/admin/events");
   };
 
   return (
