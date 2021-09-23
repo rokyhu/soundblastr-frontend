@@ -19,8 +19,8 @@
 import Dashboard from "views/Dashboard.js";
 import Notifications from "views/Notifications.js";
 import Icons from "views/Icons.js";
-import Maps from "views/Map.js";
 import UserPage from "views/User.js";
+import Bands from "views/Bands";
 
 var routes = [
   {
@@ -41,7 +41,7 @@ var routes = [
     path: "/bands",
     name: "bands",
     icon: "nc-icon nc-diamond",
-    component: Maps,
+    component: Bands,
     layout: "/admin",
   },
   {
