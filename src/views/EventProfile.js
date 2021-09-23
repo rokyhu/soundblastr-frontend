@@ -21,13 +21,13 @@ import {
   DropdownItem,
 } from "reactstrap";
 
-const getEventApiUrl = "http://localhost:8080/event/1";
+const getEventApiUrl = "http://localhost:8080/event/";
 const getListOfBandsApiUrl = "http://localhost:8080/band/all";
 const getListOfVenuesApiUrl = "http://localhost:8080/venue/all";
 const updateEventUrl = "http://localhost:8080/event/";
-const deleteEventUrl = "http://localhost:8080/event/1";
+const deleteEventUrl = "http://localhost:8080/event/";
 
-function EventProfile() {
+function EventProfile(props) {
   const [updatingEvent, setUpdatingEvent] = useState(false);
   const [event, setEvent] = useState({ venue: { id: 0 }, band: { id: 0 } });
   const [listOfBands, setListOfBands] = useState([]);
@@ -50,14 +50,14 @@ function EventProfile() {
 
   useEffect(() => {
     axios
-      .get(getEventApiUrl)
+      .get(getEventApiUrl + props.id)
       .then((res) => {
         setEvent(res.data);
       })
       .catch((err) => {
         setError(err.message);
       });
-  }, [error.message, updatingEvent]);
+  }, [error.message, updatingEvent, props.id]);
 
   useEffect(() => {
     setBandDropdownSelection(event.band.name);
@@ -117,7 +117,7 @@ function EventProfile() {
 
   const deleteEvent = (e) => {
     e.preventDefault();
-    axios.delete(deleteEventUrl);
+    axios.delete(deleteEventUrl + event.id);
     history.push("/admin/events");
   };
 
