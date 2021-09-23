@@ -34,8 +34,8 @@ function EventProfile() {
   const [image, setImage] = useState("Image");
   const [error, setError] = useState({});
   const [bandDropdownOpen, setBandDropdownOpen] = useState(false);
-  const [selectedBandId, setSelectedBandId] = useState(0);
-  const [selectedVenueId, setSelectedVenueId] = useState(0);
+  const [selectedBand, setSelectedBand] = useState({});
+  const [selectedVenue, setSelectedVenue] = useState({});
   const [bandDropdownSelection, setBandDropdownSelection] =
     useState("Select Band");
   const [venueDropdownSelection, setVenueDropdownSelection] =
@@ -73,12 +73,12 @@ function EventProfile() {
   }, [error.message]);
 
   const changeSelectedBand = (e, band) => {
-    setSelectedBandId(band.id);
+    setSelectedBand(band);
     setBandDropdownSelection(e.currentTarget.textContent);
   };
 
   const changeSelectedVenue = (e, venue) => {
-    setSelectedVenueId(venue.id - 1001);
+    setSelectedVenue(venue);
     setVenueDropdownSelection(e.currentTarget.textContent);
   };
 
@@ -111,10 +111,10 @@ function EventProfile() {
       ticketPrice: e.target.price.value,
       description: e.target.description.value,
       imageUrl: e.target.imageURL.value,
-      bandId: selectedBandId,
-      venueId: selectedVenueId,
+      bandId: selectedBand.id,
+      venueId: selectedVenue.id,
     };
-    await axios.put(saveNewEventURL, newEvent);
+    await axios.post(saveNewEventURL, newEvent);
   };
 
   return (
@@ -126,11 +126,7 @@ function EventProfile() {
               <div className="image">
                 <img
                   alt="NO EYE-MAGES"
-                  src={
-                    listOfVenues.length > 0
-                      ? listOfVenues[selectedVenueId].imageUrl
-                      : ""
-                  }
+                  src={listOfVenues.length > 0 ? selectedVenue.imageUrl : ""}
                 />
               </div>
               <CardBody>
