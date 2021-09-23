@@ -3,8 +3,6 @@ import {
     Card,
     CardBody,
     CardFooter,
-    Row,
-    Col,
   } from "reactstrap";
 
 const Band = (props) => {
@@ -18,7 +16,7 @@ const Band = (props) => {
             </div>
             <CardBody>
                 <div className="author">
-                <a href="#" onClick={(e) => e.preventDefault()}>
+                <a href="#card" onClick={(e) => e.preventDefault()}>
                     <img
                     alt="..."
                     className="avatar border-gray"
