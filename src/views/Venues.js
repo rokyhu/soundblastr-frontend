@@ -2,11 +2,13 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Venue from './Venue';
 import axios from 'axios';
+import VenueDetail from './VenueDetail';
+
 
 const Venues = (props) => {
-    
     const [venues, setVenues] = useState([]);
     const [error, setError] = useState('');
+    const [componentId, setComponentId] = useState('');
     const url = "http://localhost:8080/venue/all";
 
     useEffect(() => {
@@ -20,9 +22,13 @@ const Venues = (props) => {
             })
         }, []);
 
-    console.log(venues);
+    const handleClick = (id) => {
+        setComponentId(id);
+    } 
 
     return (
+        <>
+        {componentId === '' ? (
         <div className="content">
             {error ? (
             <div>
@@ -32,18 +38,24 @@ const Venues = (props) => {
           ) : (
             <div className="d-flex flex-wrap">
             {venues.map((venue) => (
-                <Venue
-                 key={venue.id}
-                 image={venue.imageUrl}
-                 name={venue.name}
-                 address={venue.address}
-                 description={venue.description}
-                 capacity={venue.capacity}/>
+                    <Venue
+                    key={venue.id}
+                    id={venue.id}
+                    image={venue.imageUrl}
+                    name={venue.name}
+                    address={venue.address}
+                    description={venue.description}
+                    capacity={venue.capacity}
+                    onClick={handleClick}
+                    />
             ))}
             </div>
         )}
         </div>
+        ):(
+            <VenueDetail id={componentId} />
+        )}
+        </>
     )
 }
-
 export default Venues
