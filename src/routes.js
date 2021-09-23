@@ -55,7 +55,7 @@ var routes = [
     layout: "/admin",
   },
   {
-    path: "/user-page",
+    path: "/profile",
     name: "Profile",
     icon: "nc-icon nc-single-02",
     component: UserPage,
