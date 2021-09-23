@@ -88,7 +88,6 @@ function EventProfile() {
 
   const updateEvent = async (e) => {
     e.preventDefault();
-    console.log(e.target.title.value);
 
     const updatedEvent = {
       title: e.target.title.value,
