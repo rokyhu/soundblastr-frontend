@@ -100,7 +100,6 @@ function EventProfile() {
       venueId: selectedVenueId,
     };
     await axios.put(updateEventUrl + event.id, updatedEvent);
-    console.log("put request over");
   };
 
   return (
