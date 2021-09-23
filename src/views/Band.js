@@ -25,7 +25,7 @@ const Band = (props) => {
                     src={props.image}
                     />
                 </a>
-                <h5 className="title spaced-blue">{props.name}</h5>
+                <h5 className="title spaced-orange">{props.name}</h5>
                 <p className="description">extra, small space</p>
                 </div>
                 <p className="description text-center">
