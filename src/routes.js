@@ -21,6 +21,7 @@ import Notifications from "views/Notifications.js";
 import Icons from "views/Icons.js";
 import Maps from "views/Map.js";
 import UserPage from "views/User.js";
+import EventProfile from "views/EventProfile.js";
 
 var routes = [
   {
@@ -56,6 +57,13 @@ var routes = [
     name: "Profile",
     icon: "nc-icon nc-single-02",
     component: UserPage,
+    layout: "/admin",
+  },
+  {
+    path: "/event-profile",
+    name: "Event Details",
+    icon: "nc-icon nc-calendar-60",
+    component: EventProfile,
     layout: "/admin",
   },
 ];
