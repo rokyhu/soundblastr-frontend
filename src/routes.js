@@ -22,6 +22,7 @@ import UserPage from "views/User.js";
 import EventProfile from "views/EventProfile.js";
 import Bands from "views/Bands";
 import Events from "views/Events";
+import NewEventProfile from "views/NewEventProfile";
 
 var routes = [
   {
@@ -64,6 +65,13 @@ var routes = [
     name: "Event Details",
     icon: "nc-icon nc-calendar-60",
     component: EventProfile,
+    layout: "/admin",
+  },
+  {
+    path: "/event/new",
+    name: "Add new event",
+    icon: "nc-icon nc-calendar-60",
+    component: NewEventProfile,
     layout: "/admin",
   },
 ];
