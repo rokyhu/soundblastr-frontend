@@ -33,8 +33,8 @@ const Band = (props) => {
             <CardFooter>
                 <hr />
                 <div className="button-container d-flex even-spacing">
-                    {props.genres.map((genre)=>(
-                         <div className="max30w simple-margin overflow-none">
+                    {props.genres.map((genre, i)=>(
+                         <div className="max30w simple-margin overflow-none" key={i}>
                              <button className="button-cstm">{genre}</button>
                          </div>
                     ))}
