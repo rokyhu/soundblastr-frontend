@@ -1,0 +1,34 @@
+import React from 'react';
+import {
+    Card,
+    CardBody,
+    CardFooter,
+  } from "reactstrap";
+
+const Venue = (props) => {
+    return (
+        <Card className="card-user max30w simple-margin">
+            <div className="image">
+                <img className="card-image"
+                alt={props.image}
+                src={props.image}
+                />
+            </div>
+            <CardBody>
+                <h5 className="title spaced-orange text-center">{props.name}</h5>
+                
+                <p className="description text-center">
+                    {props.description}
+                </p>
+            </CardBody>
+            <CardFooter>
+                <hr />
+                <div className="button-container d-flex even-spacing">
+                   Capactity: {props.capacity}
+                </div> 
+            </CardFooter>
+        </Card>
+    )
+}
+
+export default Venue
