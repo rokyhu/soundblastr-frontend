@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Event from "./Event";
 import axios from "axios";
+import { Button } from "reactstrap";
 
 const Events = (props) => {
   const [cards, setCards] = useState([]);
@@ -42,6 +43,9 @@ const Events = (props) => {
           ))}
         </div>
       )}
+      <a href="event/new">
+        <Button>New Event</Button>
+      </a>
     </div>
   );
 };
