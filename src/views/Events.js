@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Event from "./Event";
 import axios from "axios";
+import { Button } from "reactstrap";
 import EventProfile from "./EventProfile";
 
 const Events = (props) => {
@@ -53,6 +54,9 @@ const Events = (props) => {
           ))}
         </div>
       )}
+      <a href="event/new">
+        <Button>New Event</Button>
+      </a>
     </div>
     ) : (
       <EventProfile id={componentId} />

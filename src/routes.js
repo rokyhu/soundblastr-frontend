@@ -20,6 +20,7 @@ import Dashboard from "views/Dashboard.js";
 import Bands from "views/Bands";
 import Venues from "views/Venues";
 import Events from "views/Events";
+import NewEventProfile from "views/NewEventProfile";
 
 var routes = [
   {
@@ -48,6 +49,13 @@ var routes = [
     name: "Venues",
     icon: "nc-icon nc-diamond",
     component: Venues,
+    layout: "/admin",
+  },
+  {
+    path: "/event/new",
+    name: "Add new event",
+    icon: "nc-icon nc-calendar-60",
+    component: NewEventProfile,
     layout: "/admin",
   },
 ];
