@@ -2,10 +2,12 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Event from "./Event";
 import axios from "axios";
+import EventProfile from "./EventProfile";
 
 const Events = (props) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState("");
+  const [componentId, setComponentId] = useState('');
   const url = "http://localhost:8080/event/all";
 
   useEffect(() => {
@@ -19,9 +21,16 @@ const Events = (props) => {
       });
   }, []);
 
+  const handleClick = (id) => {
+    setComponentId(id);
+    console.log(id);
+} 
+
   return (
-    <div className="content">
-      {error ? (
+       <>
+        {componentId === '' ? (
+          <div className="content">
+          {error ? (
         <div>
           An error occured while fetching the requested information. Please try
           again!
@@ -31,6 +40,7 @@ const Events = (props) => {
           {cards.map((card) => (
             <Event
               key={card.id}
+              id={card.id}
               image={card.imageUrl}
               name={card.title}
               description={card.description}
@@ -38,11 +48,16 @@ const Events = (props) => {
               date={card.date}
               band={card.band}
               venue={card.venue}
+              onClick={handleClick}
             />
           ))}
         </div>
       )}
     </div>
+    ) : (
+      <EventProfile id={componentId} />
+  )}
+  </>
   );
 };
 

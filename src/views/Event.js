@@ -2,9 +2,14 @@ import React from "react";
 import { Card, CardBody, CardFooter, Row, Col } from "reactstrap";
 
 const Event = (props) => {
+
+  const handleClick = () => {
+    props.onClick(props.id)
+}
+
   return (
     <Col md="4">
-      <Card className="card-user">
+      <Card className="card-user" onClick={handleClick}>
         <div className="image">
           <img alt="..." src={require("assets/img/event-cover.jpg").default} />
         </div>
