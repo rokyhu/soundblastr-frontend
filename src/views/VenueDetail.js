@@ -59,11 +59,6 @@ function VenueDetail(props) {
             })
         }, [props.id]);
 
-        
-        const assembleAddress = () => {
-            <p className="text-center">{venue.address.zipcode + "," + venue.address.city + "," + venue.address.street + "," + venue.address.houseNr}</p>
-        }
-
   return (
     <>
     {error ? (
