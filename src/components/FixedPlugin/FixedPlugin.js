@@ -18,8 +18,6 @@
 */
 import React from "react";
 
-import { Button } from "reactstrap";
-
 function FixedPlugin(props) {
   const [classes, setClasses] = React.useState("dropdown");
   const handleClick = () => {
