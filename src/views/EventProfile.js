@@ -23,6 +23,7 @@ import {
 const getEventApiUrl = "http://localhost:8080/event/1";
 const getListOfBandsApiUrl = "http://localhost:8080/band/all";
 const getListOfVenuesApiUrl = "http://localhost:8080/venue/all";
+const updateEventUrl = "http://localhost:8080/event/updateId=";
 
 function EventProfile() {
   const [event, setEvent] = useState({ venue: {}, band: {} });
@@ -30,12 +31,13 @@ function EventProfile() {
   const [listOfVenues, setListOfVenues] = useState([]);
   const [error, setError] = useState({});
   const [bandDropdownOpen, setBandDropdownOpen] = useState(false);
+  const [selectedBandId, setSelectedBandId] = useState(0);
+  const [selectedVenueId, setSelectedVenueId] = useState(0);
   const [bandDropdownSelection, setBandDropdownSelection] =
     useState("Select Band");
   const [venueDropdownSelection, setVenueDropdownSelection] =
     useState("Select Venue");
   const [venueDropdownOpen, setVenueDropdownOpen] = useState(false);
-
   const toggleBandDropdown = () =>
     setBandDropdownOpen((prevState) => !prevState);
   const toggleVenueDropdown = () =>
@@ -74,12 +76,31 @@ function EventProfile() {
       });
   }, [error.message]);
 
-  const changeBandDropdownValue = (e) => {
+  const changeSelectedBand = (e, band) => {
+    setSelectedBandId(band.id);
     setBandDropdownSelection(e.currentTarget.textContent);
   };
 
-  const changeVenueDropdownValue = (e) => {
+  const changeSelectedVenue = (e, band) => {
+    setSelectedVenueId(band.id);
     setVenueDropdownSelection(e.currentTarget.textContent);
+  };
+
+  const updateEvent = async (e) => {
+    e.preventDefault();
+    console.log(e.target.title.value);
+
+    const updatedEvent = {
+      title: e.target.title.value,
+      date: e.target.date.value,
+      ticketPrice: e.target.price.value,
+      description: e.target.description.value,
+      imageUrl: e.target.imageURL.value,
+      bandId: selectedBandId,
+      venueId: selectedVenueId,
+    };
+    await axios.put(updateEventUrl + event.id, updatedEvent);
+    console.log("put request over");
   };
 
   return (
@@ -129,7 +150,7 @@ function EventProfile() {
                 <CardTitle tag="h5">Edit Details</CardTitle>
               </CardHeader>
               <CardBody>
-                <Form>
+                <Form onSubmit={updateEvent}>
                   <Row>
                     <Col className="pr-1" md="5">
                       <FormGroup>
@@ -138,6 +159,7 @@ function EventProfile() {
                           defaultValue={event.title}
                           placeholder="Title"
                           type="text"
+                          name="title"
                         />
                       </FormGroup>
                     </Col>
@@ -148,6 +170,7 @@ function EventProfile() {
                           defaultValue={event.date}
                           placeholder="Date"
                           type="date"
+                          name="date"
                         />
                       </FormGroup>
                     </Col>
@@ -155,9 +178,10 @@ function EventProfile() {
                       <FormGroup>
                         <label htmlFor="exampleInputEmail1">Price</label>
                         <Input
-                          defaultValue={event.price}
+                          defaultValue={event.price ? event.price : 0}
                           placeholder="Price"
                           type="text"
+                          name="price"
                         />
                       </FormGroup>
                     </Col>
@@ -167,9 +191,12 @@ function EventProfile() {
                       <FormGroup>
                         <label>Image URL</label>
                         <Input
-                          defaultValue={event.imageUrl}
+                          defaultValue={
+                            event.imageUrl ? event.imageURL : "null"
+                          }
                           placeholder="Image URL"
                           type="text"
+                          name="imageURL"
                         />
                       </FormGroup>
                     </Col>
@@ -179,6 +206,7 @@ function EventProfile() {
                       <Dropdown
                         isOpen={bandDropdownOpen}
                         toggle={toggleBandDropdown}
+                        name="band"
                       >
                         <DropdownToggle caret>
                           {bandDropdownSelection}
@@ -187,7 +215,9 @@ function EventProfile() {
                           <DropdownItem header>Available bands</DropdownItem>
                           {listOfBands.map((band) => (
                             <DropdownItem
-                              onClick={changeBandDropdownValue}
+                              onClick={(e) => {
+                                changeSelectedBand(e, band);
+                              }}
                               key={band.id}
                             >
                               {band.name}
@@ -200,6 +230,7 @@ function EventProfile() {
                       <Dropdown
                         isOpen={venueDropdownOpen}
                         toggle={toggleVenueDropdown}
+                        name="venue"
                       >
                         <DropdownToggle caret>
                           {venueDropdownSelection}
@@ -208,7 +239,9 @@ function EventProfile() {
                           <DropdownItem header>Available venues</DropdownItem>
                           {listOfVenues.map((venue) => (
                             <DropdownItem
-                              onClick={changeVenueDropdownValue}
+                              onClick={(e) => {
+                                changeSelectedVenue(e, venue);
+                              }}
                               key={venue.id}
                             >
                               {venue.name}
@@ -226,6 +259,7 @@ function EventProfile() {
                           defaultValue={event.description}
                           placeholder="Description"
                           type="text"
+                          name="description"
                         />
                       </FormGroup>
                     </Col>
