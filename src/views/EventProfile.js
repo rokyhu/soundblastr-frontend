@@ -26,7 +26,7 @@ const getListOfVenuesApiUrl = "http://localhost:8080/venue/all";
 const updateEventUrl = "http://localhost:8080/event/updateId=";
 
 function EventProfile() {
-  const [event, setEvent] = useState({ venue: {}, band: {} });
+  const [event, setEvent] = useState({ venue: { id: 0 }, band: { id: 0 } });
   const [listOfBands, setListOfBands] = useState([]);
   const [listOfVenues, setListOfVenues] = useState([]);
   const [error, setError] = useState({});
@@ -53,6 +53,11 @@ function EventProfile() {
         setError(err.message);
       });
   }, [error.message]);
+
+  useEffect(() => {
+    setBandDropdownSelection(event.band.name);
+    setVenueDropdownSelection(event.venue.name);
+  }, [event]);
 
   useEffect(() => {
     axios
@@ -88,19 +93,17 @@ function EventProfile() {
 
   const updateEvent = async (e) => {
     e.preventDefault();
-    console.log(e.target.title.value);
 
     const updatedEvent = {
       title: e.target.title.value,
       date: e.target.date.value,
-      ticketPrice: e.target.price.value,
+      ticketPrice: e.target.ticketPrice.value,
       description: e.target.description.value,
       imageUrl: e.target.imageURL.value,
       bandId: selectedBandId,
       venueId: selectedVenueId,
     };
     await axios.put(updateEventUrl + event.id, updatedEvent);
-    console.log("put request over");
   };
 
   return (
@@ -124,7 +127,9 @@ function EventProfile() {
                   </a>
                 </div>
                 <p className="description text-center">{event.description}</p>
-                <p className="description text-center">Price: {event.price}</p>
+                <p className="description text-center">
+                  Price: {event.ticketPrice}
+                </p>
               </CardBody>
               <CardFooter>
                 <hr />
@@ -178,10 +183,10 @@ function EventProfile() {
                       <FormGroup>
                         <label htmlFor="exampleInputEmail1">Price</label>
                         <Input
-                          defaultValue={event.price ? event.price : 0}
-                          placeholder="Price"
-                          type="text"
-                          name="price"
+                          defaultValue={event.ticketPrice}
+                          placeholder="Ticket Price"
+                          type="number"
+                          name="ticketPrice"
                         />
                       </FormGroup>
                     </Col>
@@ -191,9 +196,7 @@ function EventProfile() {
                       <FormGroup>
                         <label>Image URL</label>
                         <Input
-                          defaultValue={
-                            event.imageUrl ? event.imageURL : "null"
-                          }
+                          defaultValue={event.imageUrl}
                           placeholder="Image URL"
                           type="text"
                           name="imageURL"
