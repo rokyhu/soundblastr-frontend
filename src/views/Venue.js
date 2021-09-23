@@ -6,8 +6,13 @@ import {
   } from "reactstrap";
 
 const Venue = (props) => {
+
+    const handleClick = () => {
+        props.onClick(props.id)
+    }
+
     return (
-        <Card className="card-user max30w simple-margin">
+        <Card className="card-user max30w simple-margin" onClick={handleClick}>
             <div className="image">
                 <img className="card-image"
                 alt={props.image}
