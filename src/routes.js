@@ -17,8 +17,6 @@
 
 */
 import Dashboard from "views/Dashboard.js";
-import Icons from "views/Icons.js";
-import Notifications from "views/Notifications.js";
 import UserPage from "views/User.js";
 import EventProfile from "views/EventProfile.js";
 import Bands from "views/Bands";
