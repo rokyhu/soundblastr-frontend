@@ -41,10 +41,11 @@ const Events = (props) => {
                 <Event
                   key={card.id}
                   id={card.id}
+                  venueImg={card.venue.imageUrl}
                   image={card.imageUrl}
-                  name={card.title}
+                  title={card.title}
                   description={card.description}
-                  price={card.price}
+                  price={card.ticketPrice}
                   date={card.date}
                   band={card.band}
                   venue={card.venue}
