@@ -1,29 +1,33 @@
 import React from "react";
 import { Card, CardBody, CardFooter, Row, Col } from "reactstrap";
 
-const Event = (props) => {
+import { Button } from "reactstrap";
 
+const Event = (props) => {
   const handleClick = () => {
-    props.onClick(props.id)
-}
+    props.onClick(props.id);
+  };
 
   return (
     <Col md="4">
       <Card className="card-user" onClick={handleClick}>
         <div className="image">
-          <img alt="..." src={require("assets/img/event-cover.jpg").default} />
+          <img alt="..." src={props.venueImg} />
         </div>
         <CardBody>
           <div className="author">
             <a href="#pablo" onClick={(e) => e.preventDefault()}>
               <img alt="..." className="avatar border-gray" src={props.image} />
-              <h5 className="title">{props.title}</h5>
+              <h5 className="title spaced-orange">{props.title}</h5>
             </a>
           </div>
+
           <p className="description text-center">{props.description}</p>
-          <p className="description text-center">
-            Price: {props.price ? props.price : "TBD"}
-          </p>
+          <div className="text-center">
+            <Button className="btn-round" color="info" type="submit">
+              {props.price} HUF
+            </Button>
+          </div>
         </CardBody>
         <CardFooter>
           <hr />
