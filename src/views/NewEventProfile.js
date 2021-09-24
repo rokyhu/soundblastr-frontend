@@ -32,11 +32,15 @@ function EventProfile() {
   const [price, setPrice] = useState(0);
   const [title, setTitle] = useState("Title");
   const [description, setDescription] = useState("Description");
-  const [image, setImage] = useState("Image");
+  const [image, setImage] = useState(
+    "/paper-dashboard-react/static/media/event-cover.e95b9a62.jpg"
+  );
   const [error, setError] = useState({});
   const [bandDropdownOpen, setBandDropdownOpen] = useState(false);
   const [selectedBand, setSelectedBand] = useState({});
-  const [selectedVenue, setSelectedVenue] = useState({});
+  const [selectedVenue, setSelectedVenue] = useState({
+    imageUrl: "/paper-dashboard-react/static/media/event-cover.e95b9a62.jpg",
+  });
   const [bandDropdownSelection, setBandDropdownSelection] =
     useState("Select Band");
   const [venueDropdownSelection, setVenueDropdownSelection] =
@@ -127,18 +131,14 @@ function EventProfile() {
             <Card className="card-user">
               <div className="image">
                 <img
-                  alt="NO EYE-MAGES"
+                  alt="img"
                   src={listOfVenues.length > 0 ? selectedVenue.imageUrl : ""}
                 />
               </div>
               <CardBody>
                 <div className="author">
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    <img
-                      alt="NO PIC"
-                      className="avatar border-gray"
-                      src={image}
-                    />
+                    <img alt="img" className="avatar border-gray" src={image} />
                     <h5 className="title">{title}</h5>
                   </a>
                 </div>
