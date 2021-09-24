@@ -1,7 +1,15 @@
-img{
-    max-width: 100%;
-    border-radius: $border-radius-small;
+img {
+  max-width: 100%;
+  border-radius: $border-radius-small;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
 }
-.img-raised{
-    box-shadow: $box-shadow-raised;
+.img-raised {
+  box-shadow: $box-shadow-raised;
+}
+
+.logo-img img {
+  position: relative;
 }
