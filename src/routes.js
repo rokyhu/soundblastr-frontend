@@ -19,42 +19,43 @@
 import Dashboard from "views/Dashboard.js";
 import Bands from "views/Bands";
 import Venues from "views/Venues";
+import Icons from "views/Icons";
 import Events from "views/Events";
 import NewEventProfile from "views/NewEventProfile";
 
 var routes = [
   {
     path: "/main",
-    name: "Main Page",
-    icon: "nc-icon nc-bank",
+    name: "Admin Dashboard",
+    icon: "nc-icon nc-globe",
     component: Dashboard,
     layout: "/admin",
   },
   {
     path: "/events",
     name: "Events",
-    icon: "nc-icon nc-diamond",
+    icon: "nc-icon nc-calendar-60",
     component: Events,
     layout: "/admin",
   },
   {
     path: "/bands",
     name: "bands",
-    icon: "nc-icon nc-diamond",
+    icon: "nc-icon nc-bold",
     component: Bands,
     layout: "/admin",
   },
   {
     path: "/venues",
     name: "Venues",
-    icon: "nc-icon nc-diamond",
+    icon: "nc-icon nc-bank",
     component: Venues,
     layout: "/admin",
   },
   {
     path: "/event/new",
     name: "Add new event",
-    icon: "nc-icon nc-calendar-60",
+    icon: "nc-icon nc-single-copy-04",
     component: NewEventProfile,
     layout: "/admin",
   },
