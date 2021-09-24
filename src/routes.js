@@ -19,7 +19,6 @@
 import Dashboard from "views/Dashboard.js";
 import Bands from "views/Bands";
 import Venues from "views/Venues";
-import Icons from "views/Icons";
 import Events from "views/Events";
 import NewEventProfile from "views/NewEventProfile";
 
