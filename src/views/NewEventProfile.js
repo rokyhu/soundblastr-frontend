@@ -33,13 +33,14 @@ function EventProfile() {
   const [title, setTitle] = useState("Title");
   const [description, setDescription] = useState("Description");
   const [image, setImage] = useState(
-    "/paper-dashboard-react/static/media/event-cover.e95b9a62.jpg"
+    "https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop"
   );
   const [error, setError] = useState({});
   const [bandDropdownOpen, setBandDropdownOpen] = useState(false);
   const [selectedBand, setSelectedBand] = useState({});
   const [selectedVenue, setSelectedVenue] = useState({
-    imageUrl: "/paper-dashboard-react/static/media/event-cover.e95b9a62.jpg",
+    imageUrl:
+      "https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop",
   });
   const [bandDropdownSelection, setBandDropdownSelection] =
     useState("Select Band");
