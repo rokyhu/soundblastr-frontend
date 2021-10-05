@@ -16,7 +16,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 // javascript plugin used to create scrollbars on windows
 import PerfectScrollbar from "perfect-scrollbar";
 import { Route, Switch, useLocation } from "react-router-dom";
@@ -26,16 +26,46 @@ import DemoNavbar from "components/Navbars/DemoNavbar.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
-import routes from "routes.js";
+import { loggedInRoutes, loggedOutRoutes } from "routes.js";
 
 var ps;
 
 function Dashboard(props) {
-  const [backgroundColor, setBackgroundColor] = React.useState("black");
-  const [activeColor, setActiveColor] = React.useState("warning");
-  const mainPanel = React.useRef();
+  const [backgroundColor, setBackgroundColor] = useState("black");
+  const [activeColor, setActiveColor] = useState("warning");
+
+  const [userLogin, setUserLogin] = useState(null);
+
+  const [availableMenuItems, setAvailableMenuItems] = useState(loggedOutRoutes);
+  const [localStorageChanged, setLocalStorageChanged] = useState(false);
+
+  const mainPanel = useRef();
   const location = useLocation();
-  React.useEffect(() => {
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
+
+  useEffect(() => {
+    setLocalStorageChanged(false);
+    const username = localStorage.getItem("username");
+    const roles = localStorage.getItem("roles");
+    const token = localStorage.getItem("token");
+    if (username && roles && token) {
+      setUserLogin({ username, roles, token });
+    } else {
+      setUserLogin(null);
+    }
+  }, [localStorageChanged]);
+
+  useEffect(() => {
+    console.log(userLogin);
+    userLogin
+      ? setAvailableMenuItems(loggedInRoutes)
+      : setAvailableMenuItems(loggedOutRoutes);
+  }, [userLogin]);
+
+  useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
       ps = new PerfectScrollbar(mainPanel.current);
       document.body.classList.toggle("perfect-scrollbar-on");
@@ -47,32 +77,40 @@ function Dashboard(props) {
       }
     };
   });
-  React.useEffect(() => {
+
+  useEffect(() => {
     mainPanel.current.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [location]);
+
   const handleActiveClick = (color) => {
     setActiveColor(color);
   };
+
   const handleBgClick = (color) => {
     setBackgroundColor(color);
   };
+
   return (
     <div className="wrapper">
       <Sidebar
         {...props}
-        routes={routes}
+        routes={availableMenuItems}
         bgColor={backgroundColor}
         activeColor={activeColor}
       />
       <div className="main-panel" ref={mainPanel}>
-        <DemoNavbar {...props} />
+        <DemoNavbar {...props} routes={availableMenuItems} />
         <Switch>
-          {routes.map((prop, key) => {
+          {availableMenuItems.map((prop, key) => {
             return (
               <Route
                 path={prop.layout + prop.path}
-                component={prop.component}
+                component={() => (
+                  <prop.component
+                    setLocalStorageChanged={setLocalStorageChanged}
+                  />
+                )}
                 key={key}
               />
             );
