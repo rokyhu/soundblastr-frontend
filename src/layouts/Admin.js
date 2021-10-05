@@ -59,7 +59,6 @@ function Dashboard(props) {
   }, [localStorageChanged]);
 
   useEffect(() => {
-    console.log(userLogin);
     userLogin
       ? setAvailableMenuItems(loggedInRoutes)
       : setAvailableMenuItems(loggedOutRoutes);

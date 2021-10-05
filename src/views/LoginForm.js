@@ -15,7 +15,7 @@ import {
   Col,
 } from "reactstrap";
 
-const loginUrl = "http://localhost:8080/login";
+const loginUrl = "http://localhost:8080/auth/login";
 
 const LoginForm = (props) => {
   const attemptLogin = (e) => {
