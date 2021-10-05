@@ -1,28 +1,21 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Venue from "./Venue";
-import axios from "axios";
+import { ApiRequestHandler } from "ApiRequestHandler";
 import VenueDetail from "./VenueDetail";
 
 const Venues = (props) => {
   const [venues, setVenues] = useState([]);
   const [error, setError] = useState("");
-  const [componentId] = useState("");
+  const [componentId, setComponentId] = useState("");
   const url = "http://localhost:8080/venue/all";
 
   useEffect(() => {
-    axios
-      .get(url)
-      .then((res) => {
-        setVenues(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+    ApiRequestHandler.apiGet(url, setVenues, setError)
   }, []);
 
   const handleClick = (id) => {
-    // setComponentId(id);
+    setComponentId(id);
   };
 
   return (
