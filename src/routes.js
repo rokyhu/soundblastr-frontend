@@ -20,15 +20,23 @@ import Dashboard from "views/Dashboard.js";
 import Bands from "views/Bands";
 import Venues from "views/Venues";
 import Events from "views/Events";
+import Icons from "views/Icons";
 import LoginForm from "views/LoginForm";
 import NewEventProfile from "views/NewEventProfile";
 
 export const loggedInRoutes = [
   {
-    path: "/main",
-    name: "Admin Dashboard",
+    path: "/dashboard",
+    name: "Dashboard",
     icon: "nc-icon nc-globe",
     component: Dashboard,
+    layout: "/admin",
+  },
+  {
+    path: "/icons",
+    name: "Icons",
+    icon: "nc-icon nc-alert-circle-i",
+    component: Icons,
     layout: "/admin",
   },
   {
