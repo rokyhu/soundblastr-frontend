@@ -25,20 +25,16 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
   Container,
   InputGroup,
   InputGroupText,
   InputGroupAddon,
   Input,
 } from "reactstrap";
+import { useHistory } from "react-router-dom";
 
-function Header(props) {
+const Header = (props) => {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [dropdownOpen, setDropdownOpen] = React.useState(false);
   const [color, setColor] = React.useState("transparent");
   const sidebarToggle = React.useRef();
   const location = useLocation();
@@ -49,9 +45,6 @@ function Header(props) {
       setColor("dark");
     }
     setIsOpen(!isOpen);
-  };
-  const dropdownToggle = (e) => {
-    setDropdownOpen(!dropdownOpen);
   };
   const getBrand = () => {
     let brandName = "";
@@ -75,9 +68,12 @@ function Header(props) {
       setColor("transparent");
     }
   };
+  const history = useHistory();
+
   React.useEffect(() => {
     window.addEventListener("resize", updateColor.bind(this));
   });
+
   React.useEffect(() => {
     if (
       window.innerWidth < 993 &&
@@ -87,6 +83,13 @@ function Header(props) {
       sidebarToggle.current.classList.toggle("toggled");
     }
   }, [location]);
+
+  const emptyLocalStorage = () => {
+    localStorage.clear();
+    let path = `/admin/login`;
+    history.push(path);
+  };
+
   return (
     // add or remove classes depending if we are on full-screen-maps page or not
     <Navbar
@@ -127,7 +130,7 @@ function Header(props) {
         <Collapse isOpen={isOpen} navbar className="justify-content-end">
           <form>
             <InputGroup className="no-border">
-              <Input placeholder="Search..." />
+              <Input placeholder="Search" />
               <InputGroupAddon addonType="append">
                 <InputGroupText>
                   <i className="nc-icon nc-zoom-split" />
@@ -136,44 +139,25 @@ function Header(props) {
             </InputGroup>
           </form>
           <Nav navbar>
-            <NavItem>
-              <Link to="#pablo" className="nav-link btn-magnify">
-                <i className="nc-icon nc-layout-11" />
-                <p>
-                  <span className="d-lg-none d-md-block">Stats</span>
-                </p>
-              </Link>
-            </NavItem>
-            <Dropdown
-              nav
-              isOpen={dropdownOpen}
-              toggle={(e) => dropdownToggle(e)}
-            >
-              <DropdownToggle caret nav>
-                <i className="nc-icon nc-bell-55" />
-                <p>
-                  <span className="d-lg-none d-md-block">Some Actions</span>
-                </p>
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem tag="a">Action</DropdownItem>
-                <DropdownItem tag="a">Another Action</DropdownItem>
-                <DropdownItem tag="a">Something else here</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-            <NavItem>
-              <Link to="#pablo" className="nav-link btn-rotate">
-                <i className="nc-icon nc-settings-gear-65" />
-                <p>
-                  <span className="d-lg-none d-md-block">Account</span>
-                </p>
-              </Link>
-            </NavItem>
+            {!props.userLogin ? (
+              <></>
+            ) : (
+              <>
+                <NavItem className="ml-10">
+                  <i className="nc-icon nc-touch-id mr-10" />
+                  <p>{" ".concat(props.userLogin.username)}</p>
+                </NavItem>
+                <NavItem onClick={emptyLocalStorage}>
+                  <i className="nc-icon nc-user-run" />
+                  <p>Logout</p>
+                </NavItem>
+              </>
+            )}
           </Nav>
         </Collapse>
       </Container>
     </Navbar>
   );
-}
+};
 
 export default Header;
