@@ -63,7 +63,7 @@ export const loggedInRoutes = [
 
 export const loggedOutRoutes = [
   {
-    path: "/main",
+    path: "/login",
     name: "Login",
     icon: "nc-icon nc-alert-circle-i",
     component: LoginForm,
