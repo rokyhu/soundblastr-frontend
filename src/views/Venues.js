@@ -29,7 +29,7 @@ const Venues = (props) => {
               try again!
             </div>
           ) : (
-            <div className="d-flex flex-wrap">
+            <div className="d-flex flex-wrap justify-content-start">
               {venues.map((venue) => (
                 <Venue
                   key={venue.id}

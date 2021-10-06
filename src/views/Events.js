@@ -31,7 +31,7 @@ const Events = (props) => {
               try again!
             </div>
           ) : (
-            <div className="d-flex flex-wrap">
+            <div className="d-flex flex-wrap justify-content-start">
               {cards.map((card) => (
                 <Event
                   key={card.id}

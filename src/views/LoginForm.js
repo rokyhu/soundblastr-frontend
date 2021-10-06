@@ -15,9 +15,11 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useHistory } from "react-router-dom";
 
 const LoginForm = (props) => {
   const requestUrl = backendRoutes.auth.loginUrl;
+  const history = useHistory();
   const attemptLogin = (e) => {
     e.preventDefault();
     const userCredentials = {
@@ -25,6 +27,7 @@ const LoginForm = (props) => {
       password: e.target.password.value,
     };
     ApiRequestHandler.postLogin(requestUrl, userCredentials, props.setUserLogin)
+    history.push("/admin/dashboard");
   };
 
   return (
