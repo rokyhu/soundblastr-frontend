@@ -14,15 +14,18 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { useHistory } from "react-router-dom";
 
 const LoginForm = (props) => {
+  const history = useHistory();
   const attemptLogin = (e) => {
     e.preventDefault();
     const userCredentials = {
       username: e.target.username.value,
       password: e.target.password.value,
     };
-    ApiRequestHandler.attemptLogin(userCredentials, props.setUserLogin)
+    ApiRequestHandler.attemptLogin(userCredentials, props.setUserLogin);
+    history.push("/admin/dashboard");
   };
 
   return (
