@@ -1,7 +1,5 @@
 import React from "react";
-import { Card, CardBody, CardFooter, Row, Col } from "reactstrap";
-
-import { Button } from "reactstrap";
+import { Card, CardBody, CardFooter } from "reactstrap";
 
 const Event = (props) => {
   const handleClick = () => {
