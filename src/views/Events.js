@@ -9,11 +9,10 @@ const Events = (props) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState("");
   const [componentId, setComponentId] = useState("");
-  const url = "http://localhost:8080/event/all";
   
 
   useEffect(() => {
-    ApiRequestHandler.apiGet(url, setCards, setError)
+    ApiRequestHandler.getAllEvents(setCards, setError)
   }, [componentId]);
 
   const handleClick = (id) => {

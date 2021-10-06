@@ -4,14 +4,11 @@ import Band from './Band';
 import { ApiRequestHandler } from 'ApiRequestHandler';
 
 const Bands = (props) => {
-    
     const [cards, setCards] = useState([]);
     const [error, setError] = useState('');
-    const url = "http://localhost:8080/band/all";
-
 
     useEffect(() => {
-      ApiRequestHandler.apiGet(url, setCards, setError)
+      ApiRequestHandler.getAllBands(setCards, setError)
     }, []);
 
     return (

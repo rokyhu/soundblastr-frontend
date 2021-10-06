@@ -8,10 +8,9 @@ const Venues = (props) => {
   const [venues, setVenues] = useState([]);
   const [error, setError] = useState("");
   const [componentId, setComponentId] = useState("");
-  const url = "http://localhost:8080/venue/all";
 
   useEffect(() => {
-    ApiRequestHandler.apiGet(url, setVenues, setError)
+    ApiRequestHandler.getAllVenues(setVenues, setError)
   }, []);
 
   const handleClick = (id) => {

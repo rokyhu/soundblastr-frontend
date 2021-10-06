@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import { ApiRequestHandler } from "ApiRequestHandler";
 
 // reactstrap components
 import {
@@ -15,8 +15,6 @@ import {
   Col,
 } from "reactstrap";
 
-const loginUrl = "http://localhost:8080/auth/login";
-
 const LoginForm = (props) => {
   const attemptLogin = (e) => {
     e.preventDefault();
@@ -24,19 +22,7 @@ const LoginForm = (props) => {
       username: e.target.username.value,
       password: e.target.password.value,
     };
-    axios.post(loginUrl, userCredentials).then((res) => {
-      if (
-        res.status === 200 &&
-        res.data.hasOwnProperty("username") &&
-        res.data.hasOwnProperty("roles") &&
-        res.data.hasOwnProperty("token")
-      ) {
-        localStorage.setItem("username", res.data.username);
-        localStorage.setItem("roles", res.data.roles);
-        localStorage.setItem("token", res.data.token);
-      }
-    });
-    props.setLocalStorageChanged(true);
+    ApiRequestHandler.attemptLogin(userCredentials, props.setUserLogin)
   };
 
   return (
