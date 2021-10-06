@@ -86,8 +86,18 @@ const Header = (props) => {
 
   const emptyLocalStorage = () => {
     localStorage.clear();
+    redirectToLogin();
+    window.location.reload();
+  };
+
+  const redirectToLogin = () => {
     let path = `/admin/login`;
     history.push(path);
+  };
+
+  const capitalizeWord = (word) => {
+    const lower = word.toLowerCase();
+    return word.charAt(0).toUpperCase() + lower.slice(1);
   };
 
   return (
@@ -140,16 +150,29 @@ const Header = (props) => {
           </form>
           <Nav navbar>
             {!props.userLogin ? (
-              <></>
+              <>
+                <NavItem className="mx-4">
+                  <Link onClick={redirectToLogin}>
+                    <i className="nc-icon nc-user-run mr-2" />
+                    <p>Login</p>
+                  </Link>
+                </NavItem>
+              </>
             ) : (
               <>
-                <NavItem className="ml-10">
-                  <i className="nc-icon nc-touch-id mr-10" />
-                  <p>{" ".concat(props.userLogin.username)}</p>
+                <NavItem className="mx-4">
+                  <Link>
+                    <i className="nc-icon nc-touch-id mr-2" />
+                    <p className="font-weight-bold">
+                      {capitalizeWord(props.userLogin.username)}
+                    </p>
+                  </Link>
                 </NavItem>
                 <NavItem onClick={emptyLocalStorage}>
-                  <i className="nc-icon nc-user-run" />
-                  <p>Logout</p>
+                  <Link>
+                    <i className="nc-icon nc-user-run mr-2" />
+                    <p>Logout</p>
+                  </Link>
                 </NavItem>
               </>
             )}
