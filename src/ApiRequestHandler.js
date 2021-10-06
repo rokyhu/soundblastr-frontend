@@ -1,20 +1,4 @@
-
 import axios from 'axios';
-
-const backendRoutes = {
-  event: {
-    all: "http://localhost:8080/event/all",
-  },
-  band: {
-    all: "http://localhost:8080/band/all",
-  },
-  venue: {
-    all: "http://localhost:8080/venue/all",
-  },
-  auth: {
-    loginUrl: "http://localhost:8080/auth/login",
-  }
-}
 
 
 export const ApiRequestHandler =  {
@@ -27,9 +11,9 @@ export const ApiRequestHandler =  {
         };
       },
 
-    getAllEvents: (callback, errorCallback) => {
+    get: (url, callback, errorCallback) => {
       axios
-        .get(backendRoutes.event.all, ApiRequestHandler.assembleHeader())
+        .get(url, ApiRequestHandler.assembleHeader())
         .then((res) => {
           callback(res.data);
       })
@@ -38,29 +22,32 @@ export const ApiRequestHandler =  {
         });
     },
 
-    getAllBands: (callback, errorCallback) => {
+    delete: (url, errorCallback) => {
       axios
-        .get(backendRoutes.band.all, ApiRequestHandler.assembleHeader())
-        .then((res) => {
-          callback(res.data);
-      })
+        .delete(url, ApiRequestHandler.assembleHeader())
         .catch((err) => {
             errorCallback(err.message);
         });
     },
 
-    getAllVenues: (callback, errorCallback) => {
+    put: (url, updatedObject, errorCallback) => {
       axios
-        .get(backendRoutes.venue.all, ApiRequestHandler.assembleHeader())
-        .then((res) => {
-          callback(res.data);
-      })
+        .put(url, updatedObject, ApiRequestHandler.assembleHeader())
         .catch((err) => {
             errorCallback(err.message);
         });
     },
-    attemptLogin: (loginCredentials, setUserLogin) => {
-      axios.post(backendRoutes.auth.loginUrl, loginCredentials).then((res) => {
+
+    post: (url, payload, errorCallback) => {
+      axios
+        .post(url, payload, ApiRequestHandler.assembleHeader())
+        .catch((err) => {
+            errorCallback(err.message);
+        });
+    },
+
+    postLogin: (url, loginCredentials, setUserLogin) => {
+      axios.post(url, loginCredentials).then((res) => {
         if (
           res.status === 200 &&
           res.data.hasOwnProperty("username") &&
@@ -70,7 +57,7 @@ export const ApiRequestHandler =  {
           localStorage.setItem("username", res.data.username);
           localStorage.setItem("roles", res.data.roles);
           localStorage.setItem("token", res.data.token);
-          setUserLogin(res.data)
+          setUserLogin(res.data);
         }
       });
   }
