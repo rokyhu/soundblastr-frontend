@@ -1,4 +1,5 @@
 import React from "react";
+import { backendRoutes } from "routes.js";
 import { ApiRequestHandler } from "ApiRequestHandler";
 
 // reactstrap components
@@ -16,13 +17,14 @@ import {
 } from "reactstrap";
 
 const LoginForm = (props) => {
+  const requestUrl = backendRoutes.auth.loginUrl;
   const attemptLogin = (e) => {
     e.preventDefault();
     const userCredentials = {
       username: e.target.username.value,
       password: e.target.password.value,
     };
-    ApiRequestHandler.attemptLogin(userCredentials, props.setUserLogin)
+    ApiRequestHandler.postLogin(requestUrl, userCredentials, props.setUserLogin)
   };
 
   return (

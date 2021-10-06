@@ -1,15 +1,18 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Band from './Band';
-import { ApiRequestHandler } from 'ApiRequestHandler';
+import { ApiRequestHandler } from "ApiRequestHandler";
+import { backendRoutes } from "routes.js";
+
 
 const Bands = (props) => {
     const [cards, setCards] = useState([]);
     const [error, setError] = useState('');
+    const requestUrl = backendRoutes.band.all;
 
     useEffect(() => {
-      ApiRequestHandler.getAllBands(setCards, setError)
-    }, []);
+      ApiRequestHandler.get(requestUrl, setCards, setError)
+    }, [requestUrl]);
 
     return (
         <div className="content">
