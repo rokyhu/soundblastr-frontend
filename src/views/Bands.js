@@ -1,15 +1,18 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import Band from "./Band";
+import React from 'react';
+import { useState, useEffect } from 'react';
+import Band from './Band';
 import { ApiRequestHandler } from "ApiRequestHandler";
+import { backendRoutes } from "routes.js";
+
 
 const Bands = (props) => {
-  const [cards, setCards] = useState([]);
-  const [error, setError] = useState("");
+    const [cards, setCards] = useState([]);
+    const [error, setError] = useState('');
+    const requestUrl = backendRoutes.band.all;
 
-  useEffect(() => {
-    ApiRequestHandler.getAllBands(setCards, setError);
-  }, []);
+    useEffect(() => {
+      ApiRequestHandler.get(requestUrl, setCards, setError)
+    }, [requestUrl]);
 
   return (
     <div className="content">
@@ -19,7 +22,7 @@ const Bands = (props) => {
           again!
         </div>
       ) : (
-        <div className="d-flex flex-wrap justify-content-between">
+        <div className="d-flex flex-wrap justify-content-start">
           {cards.map((card) => (
             <Band
               key={card.id}

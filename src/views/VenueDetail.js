@@ -1,6 +1,7 @@
 import React from "react";
-import axios from "axios";
 import { useState, useEffect } from 'react';
+import { backendRoutes } from "routes";
+import { ApiRequestHandler } from "ApiRequestHandler";
 
 import {
   Button,
@@ -18,7 +19,8 @@ import {
 
 function VenueDetail(props) {
 
-    const baseUrl = "http://localhost:8080/venue/"
+  const requestUrl = (backendRoutes.venue.base).concat(props.id);
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
 
     const [venue, setVenue] = useState({
         id: null,
@@ -35,29 +37,43 @@ function VenueDetail(props) {
     });
     const [error, setError] = useState('');
     const { zipcode, city, street, houseNr } = venue.address;
+
+    const assembleVenue = (result) => {
+      setVenue({
+        id: result.id,
+        description: result.description,
+        capacity: result.capacity,
+        imageUrl:  result.imageUrl,
+        name: result.name,
+        address: {
+            city: result.address.city,
+            zipcode: result.address.zipcode,
+            street: result.address.street,
+            houseNr: result.address.houseNr,
+        }})
+    }
     
     useEffect(() => {
-        axios
-            .get(baseUrl + props.id)
-            .then((res) => {
-                setVenue({
-                    id: res.data.id,
-                    description: res.data.description,
-                    capacity: res.data.capacity,
-                    imageUrl:  res.data.imageUrl,
-                    name: res.data.name,
-                    address: {
-                        city: res.data.address.city,
-                        zipcode: res.data.address.zipcode,
-                        street: res.data.address.street,
-                        houseNr: res.data.address.houseNr,
-                    }
-                });
-            })
-            .catch((err) => {
-              setError(err.message)
-            })
-        }, [props.id]);
+        ApiRequestHandler.get(requestUrl, assembleVenue, setError)
+        }, [requestUrl, triggerUpdate]);
+
+    const updateVenue = (e) => {
+      e.preventDefault();
+      const updatedVenue = {
+        name: e.target.name.value,
+        capacity: e.target.capacity.value,
+        imageUrl: e.target.imageUrl.value,
+        address: {
+          city: e.target.city.value,
+          street: e.target.street.value,
+          houseNr: e.target.houseNr.value,
+          zipcode: e.target.zipcode.value,
+        },
+        description: e.target.description.value,
+      };
+      ApiRequestHandler.put(requestUrl, updatedVenue, setError);
+      setTriggerUpdate(!triggerUpdate);
+    };
 
   return (
     <>
@@ -100,15 +116,16 @@ function VenueDetail(props) {
                 <CardTitle tag="h5">Edit Venue Profile</CardTitle>
               </CardHeader>
               <CardBody>
-                <Form>
+                <Form onSubmit={updateVenue}>
                   <Row>
                     <Col className="pr-1" md="6">
                       <FormGroup>
-                      <label>Company</label>
+                      <label>Venue</label>
                         <Input
                           defaultValue={venue.name}
                           placeholder="Company Name"
                           type="text"
+                          name="name"
                         />
                       </FormGroup>
                     </Col>
@@ -119,11 +136,23 @@ function VenueDetail(props) {
                           defaultValue={venue.capacity}
                           placeholder="Capacity"
                           type="text"
+                          name="capacity"
                         />
                       </FormGroup>
                     </Col>
                   </Row>
                   <Row>
+                  <Col md="12">
+                      <FormGroup>
+                        <label>Image URL</label>
+                        <Input
+                          defaultValue={venue.imageUrl}
+                          placeholder="url"
+                          type="text"
+                          name="imageUrl"
+                        />
+                      </FormGroup>
+                  </Col>
                     <Col md="12">
                       <FormGroup>
                         <label>City</label>
@@ -131,6 +160,7 @@ function VenueDetail(props) {
                           defaultValue={venue.address.city}
                           placeholder="City"
                           type="text"
+                          name="city"
                         />
                       </FormGroup>
                     </Col>
@@ -143,6 +173,7 @@ function VenueDetail(props) {
                           defaultValue={venue.address.street}
                           placeholder="Street"
                           type="text"
+                          name="street"
                         />
                       </FormGroup>
                     </Col>
@@ -153,6 +184,7 @@ function VenueDetail(props) {
                           defaultValue={venue.address.houseNr}
                           placeholder="House number"
                           type="text"
+                          name="houseNr"
                         />
                       </FormGroup>
                     </Col>
@@ -162,7 +194,8 @@ function VenueDetail(props) {
                         <Input
                             defaultValue={venue.address.zipcode}
                             placeholder="ZIP Code"
-                            type="number" />
+                            type="number"
+                            name="zipcode" />
                       </FormGroup>
                     </Col>
                   </Row>
@@ -173,6 +206,7 @@ function VenueDetail(props) {
                         <Input
                           type="textarea"
                           defaultValue={venue.description}
+                          name="description"
                         />
                       </FormGroup>
                     </Col>
@@ -180,7 +214,6 @@ function VenueDetail(props) {
                   <Row>
                     <div className="update ml-auto mr-auto">
                       <Button
-                        onClick={(e) => e.preventDefault()}
                         className="btn-round"
                         color="primary"
                         type="submit"

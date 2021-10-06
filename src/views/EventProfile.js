@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { ApiRequestHandler } from "ApiRequestHandler";
+import { backendRoutes } from "routes";
 
 // reactstrap components
 import {
@@ -20,14 +21,8 @@ import {
   DropdownItem,
 } from "reactstrap";
 
-const getEventApiUrl = "http://localhost:8080/event/";
-const getListOfBandsApiUrl = "http://localhost:8080/band/all";
-const getListOfVenuesApiUrl = "http://localhost:8080/venue/all";
-const updateEventUrl = "http://localhost:8080/event/";
-const deleteEventUrl = "http://localhost:8080/event/";
-
 function EventProfile(props) {
-  const [updatingEvent, setUpdatingEvent] = useState(false);
+  const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [event, setEvent] = useState({ venue: { id: 0 }, band: { id: 0 } });
   const [listOfBands, setListOfBands] = useState([]);
   const [listOfVenues, setListOfVenues] = useState([]);
@@ -44,17 +39,15 @@ function EventProfile(props) {
     setBandDropdownOpen((prevState) => !prevState);
   const toggleVenueDropdown = () =>
     setVenueDropdownOpen((prevState) => !prevState);
+  
+  const requestUrlSingleEvent = (backendRoutes.event.base).concat(props.id);
+  const requestUrlAllBands = (backendRoutes.band.all);
+  const requestUrlAllVenues = (backendRoutes.venue.all);
+
 
   useEffect(() => {
-    axios
-      .get(getEventApiUrl + props.id)
-      .then((res) => {
-        setEvent(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, [error.message, updatingEvent, props.id]);
+    ApiRequestHandler.get(requestUrlSingleEvent, setEvent, setError)
+  }, [triggerUpdate, requestUrlSingleEvent]);
 
   useEffect(() => {
     setBandDropdownSelection(event.band.name);
@@ -64,26 +57,12 @@ function EventProfile(props) {
   }, [event]);
 
   useEffect(() => {
-    axios
-      .get(getListOfBandsApiUrl)
-      .then((res) => {
-        setListOfBands(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, [error.message]);
+    ApiRequestHandler.get(requestUrlAllBands, setListOfBands, setError)
+  }, [error.message, requestUrlAllBands]);
 
   useEffect(() => {
-    axios
-      .get(getListOfVenuesApiUrl)
-      .then((res) => {
-        setListOfVenues(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, [error.message]);
+    ApiRequestHandler.get(requestUrlAllVenues, setListOfVenues, setError)
+  }, [error.message, requestUrlAllVenues]);
 
   const changeSelectedBand = (e, band) => {
     setSelectedBandId(band.id);
@@ -95,10 +74,8 @@ function EventProfile(props) {
     setVenueDropdownSelection(e.currentTarget.textContent);
   };
 
-  const updateEvent = async (e) => {
-    setUpdatingEvent(false);
+  const updateEvent = (e) => {
     e.preventDefault();
-
     const updatedEvent = {
       title: e.target.title.value,
       date: e.target.date.value,
@@ -108,13 +85,13 @@ function EventProfile(props) {
       bandId: selectedBandId,
       venueId: selectedVenueId,
     };
-    await axios.put(updateEventUrl + event.id, updatedEvent);
-    setUpdatingEvent(true);
+    ApiRequestHandler.put(requestUrlSingleEvent, updatedEvent, setError);
+    setTriggerUpdate(!triggerUpdate);
   };
 
   const deleteEvent = (e) => {
     e.preventDefault();
-    axios.delete(deleteEventUrl + event.id);
+    ApiRequestHandler.delete(requestUrlSingleEvent, setError);
     props.onDelete("");
   };
 

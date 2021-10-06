@@ -4,15 +4,18 @@ import Event from "./Event";
 import { Button } from "reactstrap";
 import EventProfile from "./EventProfile";
 import { ApiRequestHandler } from "ApiRequestHandler";
+import { backendRoutes } from "routes.js";
 
 const Events = (props) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState("");
   const [componentId, setComponentId] = useState("");
+  const requestUrl = backendRoutes.event.all;
+  
 
   useEffect(() => {
-    ApiRequestHandler.getAllEvents(setCards, setError);
-  }, [componentId]);
+    ApiRequestHandler.get(requestUrl, setCards, setError)
+  }, [componentId, requestUrl]);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -28,7 +31,7 @@ const Events = (props) => {
               try again!
             </div>
           ) : (
-            <div className="d-flex flex-wrap justify-content-between">
+            <div className="d-flex flex-wrap justify-content-start">
               {cards.map((card) => (
                 <Event
                   key={card.id}

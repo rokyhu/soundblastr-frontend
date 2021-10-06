@@ -1,4 +1,5 @@
 import React from "react";
+import { backendRoutes } from "routes.js";
 import { ApiRequestHandler } from "ApiRequestHandler";
 
 // reactstrap components
@@ -17,6 +18,7 @@ import {
 import { useHistory } from "react-router-dom";
 
 const LoginForm = (props) => {
+  const requestUrl = backendRoutes.auth.loginUrl;
   const history = useHistory();
   const attemptLogin = (e) => {
     e.preventDefault();
@@ -24,7 +26,7 @@ const LoginForm = (props) => {
       username: e.target.username.value,
       password: e.target.password.value,
     };
-    ApiRequestHandler.attemptLogin(userCredentials, props.setUserLogin);
+    ApiRequestHandler.postLogin(requestUrl, userCredentials, props.setUserLogin)
     history.push("/admin/dashboard");
   };
 

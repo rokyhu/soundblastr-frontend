@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Venue from "./Venue";
+import { backendRoutes } from "routes.js";
 import { ApiRequestHandler } from "ApiRequestHandler";
 import VenueDetail from "./VenueDetail";
 
@@ -8,10 +9,11 @@ const Venues = (props) => {
   const [venues, setVenues] = useState([]);
   const [error, setError] = useState("");
   const [componentId, setComponentId] = useState("");
+  const requestUrl = backendRoutes.venue.all;
 
   useEffect(() => {
-    ApiRequestHandler.getAllVenues(setVenues, setError);
-  }, []);
+    ApiRequestHandler.get(requestUrl, setVenues, setError)
+  }, [requestUrl]);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -27,7 +29,7 @@ const Venues = (props) => {
               try again!
             </div>
           ) : (
-            <div className="d-flex flex-wrap justify-content-between">
+            <div className="d-flex flex-wrap justify-content-start">
               {venues.map((venue) => (
                 <Venue
                   key={venue.id}
