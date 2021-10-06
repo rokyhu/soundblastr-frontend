@@ -22,7 +22,6 @@ import PerfectScrollbar from "perfect-scrollbar";
 import { Route, Switch, useLocation } from "react-router-dom";
 
 import DemoNavbar from "components/Navbars/DemoNavbar.js";
-// import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
@@ -37,31 +36,32 @@ function Dashboard(props) {
   const [userLogin, setUserLogin] = useState(null);
 
   const [availableMenuItems, setAvailableMenuItems] = useState(loggedOutRoutes);
-  const [localStorageChanged, setLocalStorageChanged] = useState(false);
 
   const mainPanel = useRef();
   const location = useLocation();
 
-  useEffect(() => {
-    localStorage.clear();
-  }, []);
 
   useEffect(() => {
-    setLocalStorageChanged(false);
     const username = localStorage.getItem("username");
     const roles = localStorage.getItem("roles");
     const token = localStorage.getItem("token");
-    if (username && roles && token) {
-      setUserLogin({ username, roles, token });
-    } else {
-      setUserLogin(null);
+    if(token != null && roles != null && username != null ){
+      setUserLogin({
+        username: username,
+        roles: roles,
+        token: token,
+      })
     }
-  }, [localStorageChanged]);
+  }, []);
+
+
 
   useEffect(() => {
-    userLogin
-      ? setAvailableMenuItems(loggedInRoutes)
-      : setAvailableMenuItems(loggedOutRoutes);
+    if(userLogin){
+      setAvailableMenuItems(loggedInRoutes)
+    }else{
+      setAvailableMenuItems(loggedOutRoutes);
+    }
   }, [userLogin]);
 
   useEffect(() => {
@@ -107,7 +107,7 @@ function Dashboard(props) {
                 path={prop.layout + prop.path}
                 component={() => (
                   <prop.component
-                    setLocalStorageChanged={setLocalStorageChanged}
+                    setUserLogin={setUserLogin}
                   />
                 )}
                 key={key}
