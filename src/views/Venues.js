@@ -10,7 +10,7 @@ const Venues = (props) => {
   const [componentId, setComponentId] = useState("");
 
   useEffect(() => {
-    ApiRequestHandler.getAllVenues(setVenues, setError)
+    ApiRequestHandler.getAllVenues(setVenues, setError);
   }, []);
 
   const handleClick = (id) => {
@@ -27,7 +27,7 @@ const Venues = (props) => {
               try again!
             </div>
           ) : (
-            <div className="d-flex flex-wrap">
+            <div className="d-flex flex-wrap justify-content-between">
               {venues.map((venue) => (
                 <Venue
                   key={venue.id}

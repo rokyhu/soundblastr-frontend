@@ -21,7 +21,7 @@ import React, { useState, useEffect, useRef } from "react";
 import PerfectScrollbar from "perfect-scrollbar";
 import { Route, Switch, useLocation } from "react-router-dom";
 
-import DemoNavbar from "components/Navbars/DemoNavbar.js";
+import Header from "components/Navbars/Header.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
@@ -40,26 +40,23 @@ function Dashboard(props) {
   const mainPanel = useRef();
   const location = useLocation();
 
-
   useEffect(() => {
     const username = localStorage.getItem("username");
     const roles = localStorage.getItem("roles");
     const token = localStorage.getItem("token");
-    if(token != null && roles != null && username != null ){
+    if (token != null && roles != null && username != null) {
       setUserLogin({
         username: username,
         roles: roles,
         token: token,
-      })
+      });
     }
   }, []);
 
-
-
   useEffect(() => {
-    if(userLogin){
-      setAvailableMenuItems(loggedInRoutes)
-    }else{
+    if (userLogin) {
+      setAvailableMenuItems(loggedInRoutes);
+    } else {
       setAvailableMenuItems(loggedOutRoutes);
     }
   }, [userLogin]);
@@ -99,17 +96,13 @@ function Dashboard(props) {
         activeColor={activeColor}
       />
       <div className="main-panel" ref={mainPanel}>
-        <DemoNavbar {...props} routes={availableMenuItems} />
+        <Header {...props} routes={availableMenuItems} userLogin={userLogin} />
         <Switch>
           {availableMenuItems.map((prop, key) => {
             return (
               <Route
                 path={prop.layout + prop.path}
-                component={() => (
-                  <prop.component
-                    setUserLogin={setUserLogin}
-                  />
-                )}
+                component={() => <prop.component setUserLogin={setUserLogin} />}
                 key={key}
               />
             );

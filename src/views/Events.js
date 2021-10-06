@@ -9,10 +9,9 @@ const Events = (props) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState("");
   const [componentId, setComponentId] = useState("");
-  
 
   useEffect(() => {
-    ApiRequestHandler.getAllEvents(setCards, setError)
+    ApiRequestHandler.getAllEvents(setCards, setError);
   }, [componentId]);
 
   const handleClick = (id) => {
@@ -29,7 +28,7 @@ const Events = (props) => {
               try again!
             </div>
           ) : (
-            <div className="d-flex flex-wrap">
+            <div className="d-flex flex-wrap justify-content-between">
               {cards.map((card) => (
                 <Event
                   key={card.id}

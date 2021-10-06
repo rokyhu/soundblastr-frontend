@@ -52,8 +52,8 @@ function Dashboard() {
                   </Col>
                   <Col md="8" xs="7">
                     <div className="numbers">
-                      <p className="card-category">Capacity</p>
-                      <CardTitle tag="p">150GB</CardTitle>
+                      <p className="card-category">Events in 2021</p>
+                      <CardTitle tag="p">1134</CardTitle>
                       <p />
                     </div>
                   </Col>
@@ -79,7 +79,7 @@ function Dashboard() {
                   <Col md="8" xs="7">
                     <div className="numbers">
                       <p className="card-category">Revenue</p>
-                      <CardTitle tag="p">$ 1,345</CardTitle>
+                      <CardTitle tag="p">HUF 149,321,123</CardTitle>
                       <p />
                     </div>
                   </Col>
@@ -104,8 +104,8 @@ function Dashboard() {
                   </Col>
                   <Col md="8" xs="7">
                     <div className="numbers">
-                      <p className="card-category">Errors</p>
-                      <CardTitle tag="p">23</CardTitle>
+                      <p className="card-category">Bookings</p>
+                      <CardTitle tag="p">132,322</CardTitle>
                       <p />
                     </div>
                   </Col>
@@ -131,7 +131,7 @@ function Dashboard() {
                   <Col md="8" xs="7">
                     <div className="numbers">
                       <p className="card-category">Followers</p>
-                      <CardTitle tag="p">+45K</CardTitle>
+                      <CardTitle tag="p">+15K</CardTitle>
                       <p />
                     </div>
                   </Col>
@@ -150,7 +150,7 @@ function Dashboard() {
           <Col md="12">
             <Card>
               <CardHeader>
-                <CardTitle tag="h5">Users Behavior</CardTitle>
+                <CardTitle tag="h5">Annual Booking Frequency</CardTitle>
                 <p className="card-category">24 Hours performance</p>
               </CardHeader>
               <CardBody>

@@ -6,6 +6,7 @@ const Band = (props) => {
     <Card className="card-user max30w simple-margin">
       <div className="image">
         <img
+          className="card-image"
           alt={props.image}
           src={require("assets/img/bands-image.jpg").default}
         />
