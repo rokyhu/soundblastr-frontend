@@ -7,6 +7,9 @@ export const ApiRequestHandler =  {
         return {
           headers: {
             Authorization: localStorage.getItem("token") == null ? null : 'Bearer '.concat(localStorage.getItem("token")),
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
           }
         };
       },
