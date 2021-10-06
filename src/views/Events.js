@@ -1,25 +1,18 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Event from "./Event";
-import axios from "axios";
 import { Button } from "reactstrap";
 import EventProfile from "./EventProfile";
+import { ApiRequestHandler } from "ApiRequestHandler";
 
 const Events = (props) => {
   const [cards, setCards] = useState([]);
   const [error, setError] = useState("");
   const [componentId, setComponentId] = useState("");
-  const url = "http://localhost:8080/event/all";
+  
 
   useEffect(() => {
-    axios
-      .get(url)
-      .then((res) => {
-        setCards(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+    ApiRequestHandler.getAllEvents(setCards, setError)
   }, [componentId]);
 
   const handleClick = (id) => {

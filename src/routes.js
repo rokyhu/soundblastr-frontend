@@ -20,9 +20,10 @@ import Dashboard from "views/Dashboard.js";
 import Bands from "views/Bands";
 import Venues from "views/Venues";
 import Events from "views/Events";
+import LoginForm from "views/LoginForm";
 import NewEventProfile from "views/NewEventProfile";
 
-var routes = [
+export const loggedInRoutes = [
   {
     path: "/main",
     name: "Admin Dashboard",
@@ -59,4 +60,13 @@ var routes = [
     layout: "/admin",
   },
 ];
-export default routes;
+
+export const loggedOutRoutes = [
+  {
+    path: "/login",
+    name: "Login",
+    icon: "nc-icon nc-alert-circle-i",
+    component: LoginForm,
+    layout: "/admin",
+  },
+];

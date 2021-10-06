@@ -1,24 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Band from './Band';
-import axios from 'axios';
+import { ApiRequestHandler } from 'ApiRequestHandler';
 
 const Bands = (props) => {
-    
     const [cards, setCards] = useState([]);
     const [error, setError] = useState('');
-    const url = "http://localhost:8080/band/all";
 
     useEffect(() => {
-        axios
-            .get(url)
-            .then((res) => {
-              setCards(res.data);
-            })
-            .catch((err) => {
-              setError(err.message)
-            })
-        }, []);
+      ApiRequestHandler.getAllBands(setCards, setError)
+    }, []);
 
     return (
         <div className="content">

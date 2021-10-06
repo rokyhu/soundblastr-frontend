@@ -36,8 +36,6 @@ import {
   Input,
 } from "reactstrap";
 
-import routes from "routes.js";
-
 function Header(props) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
@@ -56,8 +54,8 @@ function Header(props) {
     setDropdownOpen(!dropdownOpen);
   };
   const getBrand = () => {
-    let brandName = "Default Brand";
-    routes.map((prop, key) => {
+    let brandName = "";
+    props.routes.map((prop, key) => {
       if (window.location.href.indexOf(prop.layout + prop.path) !== -1) {
         brandName = prop.name;
       }
