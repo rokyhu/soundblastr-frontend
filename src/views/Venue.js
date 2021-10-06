@@ -11,6 +11,11 @@ const Venue = (props) => {
         props.onClick(props.id)
     }
 
+    const createAddress = () => {
+        const address = props.address;
+        return address.zipcode + ", " + address.city + ", " + address.street + ", " + address.houseNr;
+    }
+
     return (
         <Card className="card-user max30w simple-margin" onClick={handleClick}>
             <div className="image">
@@ -23,8 +28,13 @@ const Venue = (props) => {
                 <h5 className="title spaced-orange text-center">{props.name}</h5>
                 
                 <p className="description text-center">
+                    {createAddress()}
+                </p>
+
+                <p className="description text-center">
                     {props.description}
                 </p>
+
             </CardBody>
             <CardFooter>
                 <hr />
