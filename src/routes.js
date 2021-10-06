@@ -70,3 +70,21 @@ export const loggedOutRoutes = [
     layout: "/admin",
   },
 ];
+
+export const backendRoutes = {
+  event: {
+    base: "http://localhost:8080/event/",
+    all: "http://localhost:8080/event/all",
+  },
+  band: {
+    base: "http://localhost:8080/band/",
+    all: "http://localhost:8080/band/all",
+  },
+  venue: {
+    base: "http://localhost:8080/venue/",
+    all: "http://localhost:8080/venue/all",
+  },
+  auth: {
+    loginUrl: "http://localhost:8080/auth/login",
+  }
+}
