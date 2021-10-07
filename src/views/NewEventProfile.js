@@ -22,7 +22,7 @@ import {
   DropdownItem,
 } from "reactstrap";
 
-function EventProfile() {
+function NewEventProfile() {
   const venueDefaultImage = require("../assets/img/venue-cover.jpg").default;
   const bandDefaultImage = require("../assets/img/band-cover.jpeg").default;
 
@@ -326,4 +326,4 @@ function EventProfile() {
   );
 }
 
-export default EventProfile;
+export default NewEventProfile;
