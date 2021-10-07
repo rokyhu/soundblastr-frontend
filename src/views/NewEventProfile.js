@@ -114,6 +114,7 @@ function EventProfile() {
     } else {
       ApiRequestHandler.post(requestUrlAddEvent, newEvent, setError);
       history.push("/admin/events");
+      history.go();
     }
   };
 
