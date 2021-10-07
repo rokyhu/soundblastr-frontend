@@ -79,8 +79,7 @@ function VenueDetail(props) {
 
   const deleteEvent = (e) => {
     e.preventDefault();
-    ApiRequestHandler.delete(requestUrl, setError);
-    props.onChange("");
+    ApiRequestHandler.delete(requestUrl, props.fetchData, setError);
   };
 
   return (
