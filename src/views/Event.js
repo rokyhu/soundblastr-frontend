@@ -1,7 +1,9 @@
 import React from "react";
-import { Card, CardBody, CardFooter } from "reactstrap";
+import { Button, Card, CardBody, CardFooter } from "reactstrap";
 
 const Event = (props) => {
+  const bandDefaultImage = require("../assets/img/band-cover.jpeg").default;
+
   const handleClick = () => {
     props.onClick(props.id);
   };
@@ -9,16 +11,25 @@ const Event = (props) => {
   return (
     <Card className="card-user max30w simple-margin" onClick={handleClick}>
       <div className="image">
-        <img className="card-image" alt={props.image} src={props.venueImg} />
+        <img className="card-image" alt={"event"} src={props.venueImg} />
       </div>
       <CardBody>
         <div className="author">
           <a href="#card" onClick={(e) => e.preventDefault()}>
-            <img alt="..." className="avatar border-gray" src={props.image} />
+            <img
+              alt="..."
+              className="avatar border-gray"
+              src={props.image ? props.image : bandDefaultImage}
+            />
           </a>
           <h5 className="title spaced-orange">{props.title}</h5>
         </div>
         <p className="description text-center">{props.description}</p>
+        <div className="text-center">
+          <Button className="btn-round" color="info" type="submit">
+            {props.price} HUF
+          </Button>
+        </div>
       </CardBody>
       <CardFooter>
         <hr />

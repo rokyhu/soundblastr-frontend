@@ -47,6 +47,13 @@ export const loggedInRoutes = [
     layout: "/admin",
   },
   {
+    path: "/event/new",
+    name: "Add new event",
+    icon: "nc-icon nc-single-copy-04",
+    component: NewEventProfile,
+    layout: "/admin",
+  },
+  {
     path: "/bands",
     name: "bands",
     icon: "nc-icon nc-bold",
@@ -58,13 +65,6 @@ export const loggedInRoutes = [
     name: "Venues",
     icon: "nc-icon nc-bank",
     component: Venues,
-    layout: "/admin",
-  },
-  {
-    path: "/event/new",
-    name: "Add new event",
-    icon: "nc-icon nc-single-copy-04",
-    component: NewEventProfile,
     layout: "/admin",
   },
 ];
@@ -94,5 +94,5 @@ export const backendRoutes = {
   },
   auth: {
     loginUrl: "http://localhost:8080/auth/login",
-  }
-}
+  },
+};

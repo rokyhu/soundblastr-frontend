@@ -152,7 +152,7 @@ const Header = (props) => {
             {!props.userLogin ? (
               <>
                 <NavItem className="mx-4">
-                  <Link onClick={redirectToLogin}>
+                  <Link to="/#" onClick={redirectToLogin}>
                     <i className="nc-icon nc-user-run mr-2" />
                     <p>Login</p>
                   </Link>
@@ -161,7 +161,7 @@ const Header = (props) => {
             ) : (
               <>
                 <NavItem className="mx-4">
-                  <Link>
+                  <Link to="/#">
                     <i className="nc-icon nc-touch-id mr-2" />
                     <p className="font-weight-bold">
                       {capitalizeWord(props.userLogin.username)}
@@ -169,7 +169,7 @@ const Header = (props) => {
                   </Link>
                 </NavItem>
                 <NavItem onClick={emptyLocalStorage}>
-                  <Link>
+                  <Link to="/#">
                     <i className="nc-icon nc-user-run mr-2" />
                     <p>Logout</p>
                   </Link>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { ApiRequestHandler } from "ApiRequestHandler";
+import { backendRoutes } from "routes";
 
 // reactstrap components
 import {
@@ -21,31 +22,28 @@ import {
   DropdownItem,
 } from "reactstrap";
 
-const getListOfBandsApiUrl = "http://localhost:8080/band/all";
-const getListOfVenuesApiUrl = "http://localhost:8080/venue/all";
-const saveNewEventURL = "http://localhost:8080/event/new";
-
 function EventProfile() {
+  const venueDefaultImage = require("../assets/img/venue-cover.jpg").default;
+  const bandDefaultImage = require("../assets/img/band-cover.jpeg").default;
+
   const [listOfBands, setListOfBands] = useState([]);
   const [listOfVenues, setListOfVenues] = useState([]);
   const [date, setDate] = useState();
-  const [price, setPrice] = useState(0);
-  const [title, setTitle] = useState("Title");
-  const [description, setDescription] = useState("Description");
-  const [image, setImage] = useState(
-    "https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop"
-  );
+  const [price, setPrice] = useState();
+  const [title, setTitle] = useState();
+  const [description, setDescription] = useState();
+  const [image, setImage] = useState();
   const [error, setError] = useState({});
   const [bandDropdownOpen, setBandDropdownOpen] = useState(false);
-  const [selectedBand, setSelectedBand] = useState({});
-  const [selectedVenue, setSelectedVenue] = useState({
-    imageUrl:
-      "https://images.theconversation.com/files/350865/original/file-20200803-24-50u91u.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=1200.0&fit=crop",
+  const [selectedBand, setSelectedBand] = useState({
+    id: null,
   });
-  const [bandDropdownSelection, setBandDropdownSelection] =
-    useState("Select Band");
-  const [venueDropdownSelection, setVenueDropdownSelection] =
-    useState("Select Venue");
+  const [selectedVenue, setSelectedVenue] = useState({
+    imageUrl: null,
+    id: null,
+  });
+  const [bandDropdownSelection, setBandDropdownSelection] = useState();
+  const [venueDropdownSelection, setVenueDropdownSelection] = useState();
   const [venueDropdownOpen, setVenueDropdownOpen] = useState(false);
   const toggleBandDropdown = () =>
     setBandDropdownOpen((prevState) => !prevState);
@@ -53,31 +51,17 @@ function EventProfile() {
     setVenueDropdownOpen((prevState) => !prevState);
   const history = useHistory();
 
-  useEffect(() => {
-    var today = new Date();
-    setDate(
-      today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
-    );
-    axios
-      .get(getListOfBandsApiUrl)
-      .then((res) => {
-        setListOfBands(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, [error.message]);
+  const requestUrlAddEvent = backendRoutes.event.base.concat("new");
+  const requestUrlAllBands = backendRoutes.band.all;
+  const requestUrlAllVenues = backendRoutes.venue.all;
 
   useEffect(() => {
-    axios
-      .get(getListOfVenuesApiUrl)
-      .then((res) => {
-        setListOfVenues(res.data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, [error.message]);
+    ApiRequestHandler.get(requestUrlAllBands, setListOfBands, setError);
+  }, [error.message, requestUrlAllBands]);
+
+  useEffect(() => {
+    ApiRequestHandler.get(requestUrlAllVenues, setListOfVenues, setError);
+  }, [error.message, requestUrlAllVenues]);
 
   const changeSelectedBand = (e, band) => {
     setSelectedBand(band);
@@ -93,7 +77,7 @@ function EventProfile() {
     setTitle(e.currentTarget.value);
   };
   const dateInputChange = (e) => {
-    setTitle(e.currentTarget.value);
+    setDate(e.currentTarget.value);
   };
 
   const priceInputChange = (e) => {
@@ -117,11 +101,29 @@ function EventProfile() {
       ticketPrice: e.target.price.value,
       description: e.target.description.value,
       imageUrl: e.target.imageURL.value,
-      bandId: selectedBand.id,
-      venueId: selectedVenue.id,
+      bandId: selectedBand.hasOwnProperty("id") ? selectedBand.id : null,
+      venueId: selectedVenue.hasOwnProperty("id") ? selectedVenue.id : null,
     };
-    await axios.post(saveNewEventURL, newEvent);
-    history.push("/admin/events");
+
+    if (
+      Object.keys(newEvent).some(
+        (e) => newEvent[e] === null || newEvent[e] === ""
+      )
+    ) {
+      console.log("some form elements weren't filled in!");
+    } else {
+      ApiRequestHandler.post(requestUrlAddEvent, newEvent, setError);
+      history.push("/admin/events");
+    }
+  };
+
+  const getToday = () => {
+    let today = new Date();
+    const dd = String(today.getDate()).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0");
+    const yyyy = today.getFullYear();
+
+    return yyyy + "-" + mm + "-" + dd;
   };
 
   return (
@@ -133,33 +135,49 @@ function EventProfile() {
               <div className="image">
                 <img
                   alt="img"
-                  src={listOfVenues.length > 0 ? selectedVenue.imageUrl : ""}
+                  src={
+                    selectedVenue.imageUrl
+                      ? selectedVenue.imageUrl
+                      : venueDefaultImage
+                  }
                 />
               </div>
               <CardBody>
                 <div className="author">
                   <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                    <img alt="img" className="avatar border-gray" src={image} />
-                    <h5 className="title">{title}</h5>
+                    <img
+                      alt="img"
+                      className="avatar border-gray"
+                      src={image ? image : bandDefaultImage}
+                    />
+                    <h5 className="title spaced-orange">
+                      {title ? title : "Add event title"}
+                    </h5>
                   </a>
                 </div>
-                <p className="description text-center">{description}</p>
-                <p className="description text-center">Price: {price}</p>
+                <p className="description text-center">
+                  {description ? description : "Add event Description"}
+                </p>
+                <div className="text-center">
+                  <Button className="btn-round" color="info" type="submit">
+                    {price ? price : 0} HUF
+                  </Button>
+                </div>
               </CardBody>
               <CardFooter>
                 <hr />
-                <div className="button-container">
-                  <Row>
-                    <Col className="ml-auto" lg="3" md="6" xs="6">
-                      <h6>{date}</h6>
-                    </Col>
-                    <Col className="ml-auto mr-auto" lg="4" md="6" xs="6">
-                      <h6>{bandDropdownSelection}</h6>
-                    </Col>
-                    <Col className="mr-auto" lg="3">
-                      <h6>{venueDropdownSelection}</h6>
-                    </Col>
-                  </Row>
+                <div className="button-container d-flex even-spacing">
+                  <p className="mx-2">{date ? date : getToday()}</p>
+                  <p className="mx-2">
+                    {bandDropdownSelection
+                      ? bandDropdownSelection
+                      : "Select Band"}
+                  </p>
+                  <p className="mx-2">
+                    {venueDropdownSelection
+                      ? venueDropdownSelection
+                      : "Select Venue"}
+                  </p>
                 </div>
               </CardFooter>
             </Card>
@@ -176,9 +194,8 @@ function EventProfile() {
                       <FormGroup>
                         <label>Title</label>
                         <Input
-                          onBlur={titleInputChange}
-                          defaultValue="Title"
-                          placeholder={title}
+                          onChange={titleInputChange}
+                          placeholder="Title"
                           type="text"
                           name="title"
                         />
@@ -188,8 +205,7 @@ function EventProfile() {
                       <FormGroup>
                         <label>Date</label>
                         <Input
-                          onBlur={dateInputChange}
-                          defaultValue={date}
+                          onChange={dateInputChange}
                           placeholder="Date"
                           type="date"
                           name="date"
@@ -200,8 +216,7 @@ function EventProfile() {
                       <FormGroup>
                         <label htmlFor="exampleInputEmail1">Price</label>
                         <Input
-                          onBlur={priceInputChange}
-                          defaultValue={price}
+                          onChange={priceInputChange}
                           placeholder="Price"
                           type="text"
                           name="price"
@@ -215,7 +230,6 @@ function EventProfile() {
                         <label>Image URL</label>
                         <Input
                           onBlur={urlInputChange}
-                          defaultValue={"URL"}
                           placeholder="Image URL"
                           type="text"
                           name="imageURL"
@@ -231,7 +245,9 @@ function EventProfile() {
                         name="band"
                       >
                         <DropdownToggle caret>
-                          {bandDropdownSelection}
+                          {bandDropdownSelection
+                            ? bandDropdownSelection
+                            : "Select Band"}
                         </DropdownToggle>
                         <DropdownMenu>
                           <DropdownItem header>Available bands</DropdownItem>
@@ -255,7 +271,9 @@ function EventProfile() {
                         name="venue"
                       >
                         <DropdownToggle caret>
-                          {venueDropdownSelection}
+                          {venueDropdownSelection
+                            ? venueDropdownSelection
+                            : "Select Venue"}
                         </DropdownToggle>
                         <DropdownMenu>
                           <DropdownItem header>Available venues</DropdownItem>
@@ -279,7 +297,6 @@ function EventProfile() {
                         <label>Description</label>
                         <Input
                           onBlur={descriptionInputChange}
-                          defaultValue="Description"
                           placeholder="Description"
                           type="text"
                           name="description"
