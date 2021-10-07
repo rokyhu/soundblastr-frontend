@@ -31,7 +31,9 @@ export const ApiRequestHandler = {
     axios.delete(url, ApiRequestHandler.assembleHeader())
     .then(callback)
     .catch((err) => {
-      const message = err.response.data === undefined ? err.message : err.response.data;
+      const message = 
+      err.response.status === 403 ? "Permission denied. Operation not allowed!" :
+      err.response.data === undefined ? err.message : err.response.data;
       errorCallback(message);
     });
   },
