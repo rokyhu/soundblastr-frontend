@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect, useCallback } from 'react';
 import { backendRoutes } from "routes";
 import { ApiRequestHandler } from "ApiRequestHandler";
+import { useAlert } from "react-alert";
 
 import {
   Button,
@@ -20,8 +21,9 @@ import GenreSelection from "./GenreSelection";
 
 function BandProfile(props) {
 
+  const alert = useAlert();
   const requestUrl = backendRoutes.band.base.concat(props.id);
-  const fetchDataCallback = props.fetchData;
+  const refreshCallback = props.refreshAfterDelete;
   const [genresList, setGenresList] = useState([]);
 
     const [band, setBand] = useState({
@@ -35,7 +37,21 @@ function BandProfile(props) {
     });
     const [error, setError] = useState('');
 
-    const assembleBand = (result) => {
+    const refreshAfterDelete = () => {
+      alert.success("Band successfully deleted!")
+      refreshCallback();
+    }
+    const refreshAfterUpdate = () => {
+      alert.success("Band successfully updated!")
+      refreshCallback();
+    }
+
+    const displayError = useCallback((e) => {
+      setError(e)
+      alert.error(error);
+    }, [alert, error])
+
+    const assembleBand = useCallback((result) => {
         setBand({
             name: result.name,
             genres: {
@@ -45,11 +61,11 @@ function BandProfile(props) {
             imageUrl: result.imageUrl,
             description: result.description,
           })
-      }
+      }, [])
 
     const fetchData = useCallback(() => {
-        ApiRequestHandler.get(requestUrl, assembleBand, setError);
-    }, [requestUrl]);
+        ApiRequestHandler.get(requestUrl, assembleBand, displayError);
+    }, [requestUrl, assembleBand, displayError]);
 
     useEffect(() => {
         fetchData();
@@ -57,7 +73,7 @@ function BandProfile(props) {
 
     const deleteEvent = (e) => {
         e.preventDefault();
-        ApiRequestHandler.delete(requestUrl, fetchDataCallback, setError);
+        ApiRequestHandler.delete(requestUrl, refreshAfterDelete, displayError);
     };
 
     const updateBand = (e) => {
@@ -70,17 +86,11 @@ function BandProfile(props) {
         imageUrl: e.target.imageUrl.value,
         description: e.target.description.value,
       };
-      ApiRequestHandler.put(requestUrl, updatedBand, fetchData, setError);
+      ApiRequestHandler.put(requestUrl, updatedBand, refreshAfterUpdate, displayError);
     };
 
   return (
     <>
-    {error ? (
-        <div>
-            An error occured while fetching the requested information. Please try
-            again!
-        </div>
-        ) : (
       <div className="content">
         <Row>
           <Col md="4">
@@ -182,7 +192,6 @@ function BandProfile(props) {
           </Col>
         </Row>
       </div>
-    )}
     </>
   );
 }
