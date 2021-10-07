@@ -53,9 +53,6 @@ const Events = (props) => {
               ))}
             </div>
           )}
-          <a href="event/new">
-            <Button>New Event</Button>
-          </a>
         </div>
       ) : (
         <EventProfile id={componentId} fetchData={fetchData} />
