@@ -19,7 +19,6 @@ import {
 
 function VenueDetail(props) {
   const requestUrl = backendRoutes.venue.base.concat(props.id);
-  const [triggerUpdate, setTriggerUpdate] = useState(false);
 
   const [venue, setVenue] = useState({
     id: null,
@@ -76,7 +75,6 @@ function VenueDetail(props) {
       description: e.target.description.value,
     };
     ApiRequestHandler.put(requestUrl, updatedVenue, fetchData, setError);
-    setTriggerUpdate(!triggerUpdate);
   };
 
   return (
