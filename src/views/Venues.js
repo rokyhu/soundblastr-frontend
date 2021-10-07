@@ -13,7 +13,7 @@ const Venues = (props) => {
 
   useEffect(() => {
     ApiRequestHandler.get(requestUrl, setVenues, setError)
-  }, [requestUrl]);
+  }, [componentId, requestUrl]);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -46,7 +46,7 @@ const Venues = (props) => {
           )}
         </div>
       ) : (
-        <VenueDetail id={componentId} />
+        <VenueDetail id={componentId} onChange={setComponentId} />
       )}
     </>
   );
