@@ -12,18 +12,20 @@ const Bands = (props) => {
     const [componentId, setComponentId] = useState('');
     const requestUrl = backendRoutes.band.all;
 
-    const fetchData = useCallback(() => {
-        ApiRequestHandler.get(requestUrl, setCards, setError);
-        setComponentId("");
+    const refreshAfterDelete = useCallback(() => {
+      ApiRequestHandler.get(requestUrl, setCards, setError);
+      setComponentId("");
     }, [requestUrl]);
 
+    
     useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+      refreshAfterDelete();
+    }, [refreshAfterDelete]);
 
     const handleClick = (id) => {
       setComponentId(id);
     };
+
 
   return (
     <>
@@ -51,7 +53,7 @@ const Bands = (props) => {
         )}
       </div>
       ) : (
-        <BandProfile id={componentId} onChange={setComponentId} fetchData={fetchData}  />
+        <BandProfile id={componentId} onChange={setComponentId} refreshAfterDelete={refreshAfterDelete}  />
       )}
     </>
     );
