@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const ApiRequestHandler = {
+
   assembleHeader: () => {
     return {
       headers: {
@@ -30,7 +31,8 @@ export const ApiRequestHandler = {
     axios.delete(url, ApiRequestHandler.assembleHeader())
     .then(callback)
     .catch((err) => {
-      errorCallback(err.message);
+      const message = err.response.data === undefined ? err.message : err.response.data;
+      errorCallback(message);
     });
   },
 
