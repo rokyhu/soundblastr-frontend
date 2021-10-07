@@ -23,6 +23,7 @@ import Events from "views/Events";
 // import Icons from "views/Icons";
 import LoginForm from "views/LoginForm";
 import NewEventProfile from "views/NewEventProfile";
+import BandProfileNew from "views/profile/BandProfileNew";
 
 export const loggedInRoutes = [
   {
@@ -61,12 +62,26 @@ export const loggedInRoutes = [
     layout: "/admin",
   },
   {
+    path: "/band/new",
+    name: "Add new band",
+    icon: "nc-icon nc-single-copy-04",
+    component: BandProfileNew,
+    layout: "/admin",
+  },
+  {
     path: "/venues",
     name: "Venues",
     icon: "nc-icon nc-bank",
     component: Venues,
     layout: "/admin",
   },
+  // {
+  //   path: "/venue/new",
+  //   name: "Add new venue",
+  //   icon: "nc-icon nc-single-copy-04",
+  //   component: VenueDetailNew,
+  //   layout: "/admin",
+  // },
 ];
 
 export const loggedOutRoutes = [
