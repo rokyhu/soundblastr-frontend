@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardBody, CardFooter } from "reactstrap";
 
 const Venue = (props) => {
+  
   const handleClick = () => {
     props.onClick(props.id);
   };
