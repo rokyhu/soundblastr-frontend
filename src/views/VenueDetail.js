@@ -141,7 +141,7 @@ function VenueDetail(props) {
                           <Input
                             defaultValue={venue.capacity}
                             placeholder="Capacity"
-                            type="text"
+                            type="number"
                             name="capacity"
                           />
                         </FormGroup>
