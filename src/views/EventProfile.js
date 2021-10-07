@@ -25,7 +25,6 @@ function EventProfile(props) {
   const venueDefaultImage = require("../assets/img/venue-cover.jpg").default;
   const bandDefaultImage = require("../assets/img/band-cover.jpeg").default;
 
-  const [triggerUpdate, setTriggerUpdate] = useState(false);
   const [event, setEvent] = useState({ venue: { id: 0 }, band: { id: 0 } });
   const [listOfBands, setListOfBands] = useState([]);
   const [listOfVenues, setListOfVenues] = useState([]);
