@@ -107,8 +107,11 @@ function EventProfile(props) {
 
   const deleteEvent = (e) => {
     e.preventDefault();
-    ApiRequestHandler.delete(requestUrlSingleEvent, setError);
-    props.onDelete("");
+    ApiRequestHandler.delete(
+      requestUrlSingleEvent,
+      props.fetchData,
+      props.setError
+    );
   };
 
   return (
