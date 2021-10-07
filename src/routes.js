@@ -110,4 +110,7 @@ export const backendRoutes = {
   auth: {
     loginUrl: "http://localhost:8080/auth/login",
   },
+  genre: {
+    all: "http://localhost:8080/band/getGenres",
+  },
 };
