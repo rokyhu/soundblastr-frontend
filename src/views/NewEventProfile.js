@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ApiRequestHandler } from "ApiRequestHandler";
 import { backendRoutes } from "routes";
+import { useAlert } from "react-alert";
 
 // reactstrap components
 import {
@@ -25,7 +26,7 @@ import {
 function NewEventProfile() {
   const venueDefaultImage = require("../assets/img/venue-cover.jpg").default;
   const bandDefaultImage = require("../assets/img/band-cover.jpeg").default;
-
+  const alert = useAlert();
   const [listOfBands, setListOfBands] = useState([]);
   const [listOfVenues, setListOfVenues] = useState([]);
   const [date, setDate] = useState();
@@ -112,10 +113,19 @@ function NewEventProfile() {
     ) {
       console.log("some form elements weren't filled in!");
     } else {
-      ApiRequestHandler.post(requestUrlAddEvent, newEvent, setError);
-      history.push("/admin/events");
-      history.go();
+      ApiRequestHandler.post(
+        requestUrlAddEvent,
+        newEvent,
+        refreshAfterAdd,
+        setError
+      );
     }
+  };
+
+  const refreshAfterAdd = () => {
+    history.push("/admin/events");
+    history.go();
+    alert.success("Event successfully added."); // Does not work yet, most likely because of the history.push call.
   };
 
   const getToday = () => {
@@ -135,6 +145,7 @@ function NewEventProfile() {
             <Card className="card-user">
               <div className="image">
                 <img
+                  className="card-image"
                   alt="img"
                   src={
                     selectedVenue.imageUrl

@@ -58,6 +58,11 @@ function EventProfile() {
     setDescription(e.currentTarget.value);
   };
 
+  const refreshAfterAdd = () => {
+    history.push("/admin/events");
+    history.go();
+  };
+
   const saveNewBand = () => {
     const newBand = {
       name: name,
@@ -71,7 +76,12 @@ function EventProfile() {
     ) {
       console.log("some form elements weren't filled in!");
     } else {
-      ApiRequestHandler.post(requestUrlAddBand, newBand, setError);
+      ApiRequestHandler.post(
+        requestUrlAddBand,
+        newBand,
+        refreshAfterAdd,
+        setError
+      );
       history.push("/admin/bands");
       history.go();
     }
@@ -84,7 +94,11 @@ function EventProfile() {
           <Col md="4">
             <Card className="card-user">
               <div className="image">
-                <img alt="band default cover" src={bandDefaultCover} />
+                <img
+                  className="card-image"
+                  alt="band default cover"
+                  src={bandDefaultCover}
+                />
               </div>
               <CardBody>
                 <div className="author">

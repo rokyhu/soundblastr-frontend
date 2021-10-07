@@ -11,14 +11,14 @@ const Venues = (props) => {
   const [componentId, setComponentId] = useState("");
   const requestUrl = backendRoutes.venue.all;
 
-  const fetchData = useCallback(() => {
+  const refreshAfterDelete = useCallback(() => {
     ApiRequestHandler.get(requestUrl, setVenues, setError);
     setComponentId("");
   }, [requestUrl]);
 
   useEffect(() => {
-      fetchData();
-  }, [fetchData]);
+    refreshAfterDelete();
+  }, [refreshAfterDelete]);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -51,7 +51,11 @@ const Venues = (props) => {
           )}
         </div>
       ) : (
-        <VenueDetail id={componentId} onChange={setComponentId} fetchData={fetchData} />
+        <VenueDetail
+          id={componentId}
+          onChange={setComponentId}
+          refreshAfterDelete={refreshAfterDelete}
+        />
       )}
     </>
   );

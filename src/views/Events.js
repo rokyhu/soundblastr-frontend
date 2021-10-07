@@ -11,14 +11,14 @@ const Events = (props) => {
   const [componentId, setComponentId] = useState("");
   const requestUrl = backendRoutes.event.all;
 
-  const fetchData = useCallback(() => {
+  const refreshAfterDelete = useCallback(() => {
     ApiRequestHandler.get(requestUrl, setEvents, setError);
     setComponentId("");
   }, [requestUrl]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    refreshAfterDelete();
+  }, [refreshAfterDelete]);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -54,7 +54,10 @@ const Events = (props) => {
           )}
         </div>
       ) : (
-        <EventProfile id={componentId} fetchData={fetchData} />
+        <EventProfile
+          id={componentId}
+          refreshAfterDelete={refreshAfterDelete}
+        />
       )}
     </>
   );

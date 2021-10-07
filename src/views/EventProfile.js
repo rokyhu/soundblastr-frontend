@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { ApiRequestHandler } from "ApiRequestHandler";
 import { backendRoutes } from "routes";
+import { useAlert } from "react-alert";
 
 // reactstrap components
 import {
@@ -24,7 +25,7 @@ import {
 function EventProfile(props) {
   const venueDefaultImage = require("../assets/img/venue-cover.jpg").default;
   const bandDefaultImage = require("../assets/img/band-cover.jpeg").default;
-
+  const alert = useAlert();
   const [event, setEvent] = useState({ venue: { id: 0 }, band: { id: 0 } });
   const [listOfBands, setListOfBands] = useState([]);
   const [listOfVenues, setListOfVenues] = useState([]);
@@ -39,6 +40,7 @@ function EventProfile(props) {
     setBandDropdownOpen((prevState) => !prevState);
   const toggleVenueDropdown = () =>
     setVenueDropdownOpen((prevState) => !prevState);
+  const refreshCallback = props.refreshAfterDelete;
 
   const requestUrlSingleEvent = backendRoutes.event.base.concat(props.id);
   const requestUrlAllBands = backendRoutes.band.all;
@@ -47,6 +49,13 @@ function EventProfile(props) {
   const fetchData = useCallback(() => {
     ApiRequestHandler.get(requestUrlSingleEvent, setEvent, setError);
   }, [requestUrlSingleEvent]);
+
+  const displayError = useCallback(
+    (e) => {
+      alert.error(e);
+    },
+    [alert]
+  );
 
   useEffect(() => {
     fetchData();
@@ -66,6 +75,16 @@ function EventProfile(props) {
   useEffect(() => {
     ApiRequestHandler.get(requestUrlAllVenues, setListOfVenues, setError);
   }, [error.message, requestUrlAllVenues]);
+
+  const refreshAfterDelete = () => {
+    alert.success("Event successfully deleted!");
+    refreshCallback();
+  };
+
+  const refreshAfterUpdate = () => {
+    alert.success("Event successfully updated!");
+    fetchData();
+  };
 
   const changeSelectedBand = (e, band) => {
     setSelectedBandId(band.id);
@@ -99,8 +118,8 @@ function EventProfile(props) {
       ApiRequestHandler.put(
         requestUrlSingleEvent,
         updatedEvent,
-        fetchData,
-        setError
+        refreshAfterUpdate,
+        displayError
       );
     }
   };
@@ -109,8 +128,8 @@ function EventProfile(props) {
     e.preventDefault();
     ApiRequestHandler.delete(
       requestUrlSingleEvent,
-      props.fetchData,
-      setError
+      refreshAfterDelete,
+      displayError
     );
   };
 
@@ -122,7 +141,8 @@ function EventProfile(props) {
             <Card className="card-user">
               <div className="image">
                 <img
-                  alt="..."
+                  className="card-image"
+                  alt="event venue cover"
                   src={
                     event.venue.imageUrl
                       ? event.venue.imageUrl

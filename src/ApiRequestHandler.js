@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const ApiRequestHandler = {
-
   assembleHeader: () => {
     return {
       headers: {
@@ -28,14 +27,18 @@ export const ApiRequestHandler = {
   },
 
   delete: (url, callback, errorCallback) => {
-    axios.delete(url, ApiRequestHandler.assembleHeader())
-    .then(callback)
-    .catch((err) => {
-      const message = 
-      err.response.status === 403 ? "Permission denied. Operation not allowed!" :
-      err.response.data === undefined ? err.message : err.response.data;
-      errorCallback(message);
-    });
+    axios
+      .delete(url, ApiRequestHandler.assembleHeader())
+      .then(callback)
+      .catch((err) => {
+        const message =
+          err.response.status === 403
+            ? "Permission denied. Operation not allowed!"
+            : err.response.data === undefined
+            ? err.message
+            : err.response.data;
+        errorCallback(message);
+      });
   },
 
   put: (url, updatedObject, callback, errorCallback) => {
@@ -47,9 +50,10 @@ export const ApiRequestHandler = {
       });
   },
 
-  post: (url, payload, errorCallback) => {
+  post: (url, payload, callback, errorCallback) => {
     axios
       .post(url, payload, ApiRequestHandler.assembleHeader())
+      .then(callback)
       .catch((err) => {
         errorCallback(err.message);
       });
