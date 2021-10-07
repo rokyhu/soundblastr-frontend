@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Event from "./Event";
 import { Button } from "reactstrap";
 import EventProfile from "./EventProfile";
@@ -7,14 +7,19 @@ import { ApiRequestHandler } from "ApiRequestHandler";
 import { backendRoutes } from "routes.js";
 
 const Events = (props) => {
-  const [cards, setCards] = useState([]);
+  const [events, setEvents] = useState([]);
   const [error, setError] = useState("");
   const [componentId, setComponentId] = useState("");
   const requestUrl = backendRoutes.event.all;
 
+  const fetchData = useCallback(() => {
+    ApiRequestHandler.get(requestUrl, setEvents, setError);
+    setComponentId("");
+  }, [requestUrl]);
+
   useEffect(() => {
-    ApiRequestHandler.get(requestUrl, setCards, setError);
-  }, [componentId, requestUrl]);
+    fetchData();
+  }, [fetchData]);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -31,7 +36,7 @@ const Events = (props) => {
             </div>
           ) : (
             <div className="d-flex flex-wrap justify-content-start">
-              {cards.map((card) => (
+              {events.map((card) => (
                 <Event
                   key={card.id}
                   id={card.id}
@@ -53,11 +58,7 @@ const Events = (props) => {
           </a>
         </div>
       ) : (
-        <EventProfile
-          id={componentId}
-          onDelete={setComponentId}
-          onChange={setComponentId}
-        />
+        <EventProfile id={componentId} fetchData={fetchData} />
       )}
     </>
   );
