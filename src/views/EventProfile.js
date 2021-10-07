@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ApiRequestHandler } from "ApiRequestHandler";
 import { backendRoutes } from "routes";
 
@@ -45,9 +45,13 @@ function EventProfile(props) {
   const requestUrlAllBands = backendRoutes.band.all;
   const requestUrlAllVenues = backendRoutes.venue.all;
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     ApiRequestHandler.get(requestUrlSingleEvent, setEvent, setError);
-  }, [triggerUpdate, requestUrlSingleEvent]);
+  }, [requestUrlSingleEvent]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     setBandDropdownSelection(event.band.name);
@@ -93,8 +97,12 @@ function EventProfile(props) {
     ) {
       console.log("some form elements weren't filled in!");
     } else {
-      ApiRequestHandler.put(requestUrlSingleEvent, updatedEvent, setError);
-      setTriggerUpdate(!triggerUpdate);
+      ApiRequestHandler.put(
+        requestUrlSingleEvent,
+        updatedEvent,
+        fetchData,
+        setError
+      );
     }
   };
 
