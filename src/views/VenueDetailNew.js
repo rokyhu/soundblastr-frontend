@@ -68,6 +68,11 @@ function VenueDetailNew() {
     setAddressStreet(e.currentTarget.value);
   };
 
+  const refreshAfterAdd = () => {
+    history.push("/admin/events");
+    history.go();
+  };
+
   const saveNewVenue = (e) => {
     e.preventDefault();
 
@@ -91,7 +96,12 @@ function VenueDetailNew() {
     ) {
       console.log("some form elements weren't filled in!");
     } else {
-      ApiRequestHandler.post(requestUrlAddVenue, newVenue, setError);
+      ApiRequestHandler.post(
+        requestUrlAddVenue,
+        newVenue,
+        refreshAfterAdd,
+        setError
+      );
       history.push("/admin/venues");
       history.go();
     }
@@ -104,7 +114,7 @@ function VenueDetailNew() {
           <Col md="4">
             <Card className="card-user">
               <div className="image">
-                <img alt="img" src={venueDefaultImage} />
+                <img className="card-image" alt="img" src={venueDefaultImage} />
               </div>
               <CardBody>
                 <div className="author">
