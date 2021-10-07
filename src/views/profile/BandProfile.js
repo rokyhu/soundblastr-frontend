@@ -47,10 +47,9 @@ function BandProfile(props) {
     }
 
     const displayError = useCallback((e) => {
-      console.log("errrrrrr")
       setError(e)
-      alert.error(e);
-    }, [alert])
+      alert.error(error);
+    }, [alert, error])
 
     const assembleBand = useCallback((result) => {
         setBand({
