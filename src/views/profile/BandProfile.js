@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 import { backendRoutes } from "routes";
 import { ApiRequestHandler } from "ApiRequestHandler";
 import { useAlert } from "react-alert";
@@ -20,72 +20,81 @@ import {
 import GenreSelection from "./GenreSelection";
 
 function BandProfile(props) {
-
+  const bandDefaultImage = require("../../assets/img/venue-cover.jpg").default;
+  const bandDefaultCover = require("assets/img/bands-image.jpg").default;
   const alert = useAlert();
   const requestUrl = backendRoutes.band.base.concat(props.id);
   const refreshCallback = props.refreshAfterDelete;
   const [genresList, setGenresList] = useState([]);
 
-    const [band, setBand] = useState({
-        name: null,
-        genres: {
-            all: [],
-            selected: [],
-        },
-        imageUrl: null,
-        description: null,
-    });
+  const [band, setBand] = useState({
+    name: null,
+    genres: {
+      all: [],
+      selected: [],
+    },
+    imageUrl: null,
+    description: null,
+  });
 
-    const refreshAfterDelete = () => {
-      alert.success("Band successfully deleted!")
-      refreshCallback();
-    }
-    const refreshAfterUpdate = () => {
-      alert.success("Band successfully updated!")
-      refreshCallback();
-    }
+  const refreshAfterDelete = () => {
+    alert.success("Band successfully deleted!");
+    refreshCallback();
+  };
+  const refreshAfterUpdate = () => {
+    alert.success("Band successfully updated!");
+    fetchData();
+  };
 
-    const displayError = useCallback((e) => {
+  const displayError = useCallback(
+    (e) => {
       alert.error(e);
-    }, [alert])
+    },
+    [alert]
+  );
 
-    const assembleBand = useCallback((result) => {
-        setBand({
-            name: result.name,
-            genres: {
-                all: result.genreSelection.all,
-                selected:  result.genreSelection.selected,
-            },
-            imageUrl: result.imageUrl,
-            description: result.description,
-          })
-      }, [])
+  const assembleBand = useCallback((result) => {
+    setBand({
+      name: result.name,
+      genres: {
+        all: result.genreSelection.all,
+        selected: result.genreSelection.selected,
+      },
+      imageUrl: result.imageUrl,
+      description: result.description,
+    });
+  }, []);
 
-    const fetchData = useCallback(() => {
-        ApiRequestHandler.get(requestUrl, assembleBand, displayError);
-    }, [requestUrl, assembleBand, displayError]);
+  const fetchData = useCallback(() => {
+    ApiRequestHandler.get(requestUrl, assembleBand, displayError);
+  }, [requestUrl, assembleBand, displayError]);
 
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-    const deleteEvent = (e) => {
-        e.preventDefault();
-        ApiRequestHandler.delete(requestUrl, refreshAfterDelete, displayError);
+  const deleteEvent = (e) => {
+    e.preventDefault();
+    ApiRequestHandler.delete(requestUrl, refreshAfterDelete, displayError);
+  };
+
+  const updateBand = (e) => {
+    e.preventDefault();
+    const genres = [];
+    genresList.forEach((g) => genres.push(g.tag));
+    const updatedBand = {
+      name: e.target.name.value,
+      genres: genres,
+      imageUrl: e.target.imageUrl.value,
+      description: e.target.description.value,
     };
-
-    const updateBand = (e) => {
-      e.preventDefault();
-      const genres = [];
-      genresList.forEach(g => genres.push(g.tag))
-      const updatedBand = {
-        name: e.target.name.value,
-        genres: genres,
-        imageUrl: e.target.imageUrl.value,
-        description: e.target.description.value,
-      };
-      ApiRequestHandler.put(requestUrl, updatedBand, refreshAfterUpdate, displayError);
-    };
+    ApiRequestHandler.put(
+      requestUrl,
+      updatedBand,
+      refreshAfterUpdate,
+      displayError
+    );
+  };
 
   return (
     <>
@@ -95,20 +104,35 @@ function BandProfile(props) {
             <Card className="card-user">
               <div className="image">
                 <img
-                  alt={band.imageUrl}
-                  src={band.imageUrl}
+                  className="card-image"
+                  alt="band default cover"
+                  src={bandDefaultCover}
                 />
               </div>
               <CardBody>
-                <div>
-                <h5 className="title text-center spaced-orange">{band.name}</h5>
+                <div className="author">
+                  <a href="#pablo" onClick={(e) => e.preventDefault()}>
+                    <img
+                      alt="img"
+                      className="card-image avatar border-gray"
+                      src={band.imageUrl ? band.imageUrl : bandDefaultImage}
+                    />
+                    <h5 className="title spaced-orange">
+                      {band.name ? band.name : "Add event name"}
+                    </h5>
+                  </a>
                 </div>
-                <p className="description text-center">
-                {band.description}
-                </p>
+                <p className="description text-center">{band.description}</p>
               </CardBody>
               <CardFooter>
                 <hr />
+                <div className="button-container d-flex even-spacing">
+                  {band.genres.selected.map((genre, i) => (
+                    <div className="max30w simple-margin overflow-none" key={i}>
+                      <button className="button-cstm">{genre}</button>
+                    </div>
+                  ))}
+                </div>
               </CardFooter>
             </Card>
           </Col>
@@ -122,7 +146,7 @@ function BandProfile(props) {
                   <Row>
                     <Col className="pr-1" md="6">
                       <FormGroup>
-                      <label>Band</label>
+                        <label>Band</label>
                         <Input
                           defaultValue={band.name}
                           placeholder="Band Name"
@@ -133,7 +157,7 @@ function BandProfile(props) {
                     </Col>
                   </Row>
                   <Row>
-                  <Col md="12">
+                    <Col md="12">
                       <FormGroup>
                         <label>Image URL</label>
                         <Input
@@ -143,16 +167,20 @@ function BandProfile(props) {
                           name="imageUrl"
                         />
                       </FormGroup>
-                  </Col>
+                    </Col>
                   </Row>
                   <Row>
-                  <Col md="12">
+                    <Col md="12">
                       <FormGroup>
                         <label>Genres</label>
-                        <GenreSelection genresAll={band.genres.all} genresSelected={band.genres.selected} onClick={setGenresList}/>
+                        <GenreSelection
+                          genresAll={band.genres.all}
+                          genresSelected={band.genres.selected}
+                          onClick={setGenresList}
+                        />
                       </FormGroup>
-                  </Col>
-                  </Row>         
+                    </Col>
+                  </Row>
                   <Row>
                     <Col md="12">
                       <FormGroup>
