@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { ApiRequestHandler } from "ApiRequestHandler";
 import { backendRoutes } from "routes";
 
@@ -22,32 +22,35 @@ import {
 } from "reactstrap";
 
 function EventProfile(props) {
-  const [triggerUpdate, setTriggerUpdate] = useState(false);
+  const venueDefaultImage = require("../assets/img/venue-cover.jpg").default;
+  const bandDefaultImage = require("../assets/img/band-cover.jpeg").default;
+
   const [event, setEvent] = useState({ venue: { id: 0 }, band: { id: 0 } });
   const [listOfBands, setListOfBands] = useState([]);
   const [listOfVenues, setListOfVenues] = useState([]);
   const [error, setError] = useState({});
   const [bandDropdownOpen, setBandDropdownOpen] = useState(false);
-  const [selectedBandId, setSelectedBandId] = useState(0);
-  const [selectedVenueId, setSelectedVenueId] = useState(0);
-  const [bandDropdownSelection, setBandDropdownSelection] =
-    useState("Select Band");
-  const [venueDropdownSelection, setVenueDropdownSelection] =
-    useState("Select Venue");
+  const [selectedBandId, setSelectedBandId] = useState();
+  const [selectedVenueId, setSelectedVenueId] = useState();
+  const [bandDropdownSelection, setBandDropdownSelection] = useState();
+  const [venueDropdownSelection, setVenueDropdownSelection] = useState();
   const [venueDropdownOpen, setVenueDropdownOpen] = useState(false);
   const toggleBandDropdown = () =>
     setBandDropdownOpen((prevState) => !prevState);
   const toggleVenueDropdown = () =>
     setVenueDropdownOpen((prevState) => !prevState);
-  
-  const requestUrlSingleEvent = (backendRoutes.event.base).concat(props.id);
-  const requestUrlAllBands = (backendRoutes.band.all);
-  const requestUrlAllVenues = (backendRoutes.venue.all);
 
+  const requestUrlSingleEvent = backendRoutes.event.base.concat(props.id);
+  const requestUrlAllBands = backendRoutes.band.all;
+  const requestUrlAllVenues = backendRoutes.venue.all;
+
+  const fetchData = useCallback(() => {
+    ApiRequestHandler.get(requestUrlSingleEvent, setEvent, setError);
+  }, [requestUrlSingleEvent]);
 
   useEffect(() => {
-    ApiRequestHandler.get(requestUrlSingleEvent, setEvent, setError)
-  }, [triggerUpdate, requestUrlSingleEvent]);
+    fetchData();
+  }, [fetchData]);
 
   useEffect(() => {
     setBandDropdownSelection(event.band.name);
@@ -57,11 +60,11 @@ function EventProfile(props) {
   }, [event]);
 
   useEffect(() => {
-    ApiRequestHandler.get(requestUrlAllBands, setListOfBands, setError)
+    ApiRequestHandler.get(requestUrlAllBands, setListOfBands, setError);
   }, [error.message, requestUrlAllBands]);
 
   useEffect(() => {
-    ApiRequestHandler.get(requestUrlAllVenues, setListOfVenues, setError)
+    ApiRequestHandler.get(requestUrlAllVenues, setListOfVenues, setError);
   }, [error.message, requestUrlAllVenues]);
 
   const changeSelectedBand = (e, band) => {
@@ -76,6 +79,7 @@ function EventProfile(props) {
 
   const updateEvent = (e) => {
     e.preventDefault();
+
     const updatedEvent = {
       title: e.target.title.value,
       date: e.target.date.value,
@@ -85,8 +89,20 @@ function EventProfile(props) {
       bandId: selectedBandId,
       venueId: selectedVenueId,
     };
-    ApiRequestHandler.put(requestUrlSingleEvent, updatedEvent, setError);
-    setTriggerUpdate(!triggerUpdate);
+    if (
+      Object.keys(updatedEvent).some(
+        (e) => updatedEvent[e] === null || updatedEvent[e] === ""
+      )
+    ) {
+      console.log("some form elements weren't filled in!");
+    } else {
+      ApiRequestHandler.put(
+        requestUrlSingleEvent,
+        updatedEvent,
+        fetchData,
+        setError
+      );
+    }
   };
 
   const deleteEvent = (e) => {
@@ -102,7 +118,14 @@ function EventProfile(props) {
           <Col md="4">
             <Card className="card-user">
               <div className="image">
-                <img alt="..." src={event.venue.imageUrl} />
+                <img
+                  alt="..."
+                  src={
+                    event.venue.imageUrl
+                      ? event.venue.imageUrl
+                      : venueDefaultImage
+                  }
+                />
               </div>
               <CardBody>
                 <div className="author">
@@ -110,9 +133,9 @@ function EventProfile(props) {
                     <img
                       alt="..."
                       className="avatar border-gray"
-                      src={event.imageUrl}
+                      src={event.imageUrl ? event.imageUrl : bandDefaultImage}
                     />
-                    <h5 className="title">{event.title}</h5>
+                    <h5 className="title spaced-orange">{event.title}</h5>
                   </a>
                 </div>
                 <p className="description text-center">{event.description}</p>
@@ -124,18 +147,10 @@ function EventProfile(props) {
               </CardBody>
               <CardFooter>
                 <hr />
-                <div className="button-container">
-                  <Row>
-                    <Col className="ml-auto" lg="3" md="6" xs="6">
-                      <h6>{event.date}</h6>
-                    </Col>
-                    <Col className="ml-auto mr-auto" lg="4" md="6" xs="6">
-                      <h6>{event.band.name}</h6>
-                    </Col>
-                    <Col className="mr-auto" lg="3">
-                      <h6>{event.venue.name}</h6>
-                    </Col>
-                  </Row>
+                <div className="button-container d-flex even-spacing">
+                  <p className="mx-2">{event.date}</p>
+                  <p className="mx-2">{event.band.name}</p>
+                  <p className="mx-2">{event.venue.name}</p>
                 </div>
               </CardFooter>
             </Card>

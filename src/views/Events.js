@@ -11,10 +11,9 @@ const Events = (props) => {
   const [error, setError] = useState("");
   const [componentId, setComponentId] = useState("");
   const requestUrl = backendRoutes.event.all;
-  
 
   useEffect(() => {
-    ApiRequestHandler.get(requestUrl, setCards, setError)
+    ApiRequestHandler.get(requestUrl, setCards, setError);
   }, [componentId, requestUrl]);
 
   const handleClick = (id) => {
@@ -54,7 +53,11 @@ const Events = (props) => {
           </a>
         </div>
       ) : (
-        <EventProfile id={componentId} onDelete={setComponentId} />
+        <EventProfile
+          id={componentId}
+          onDelete={setComponentId}
+          onChange={setComponentId}
+        />
       )}
     </>
   );
