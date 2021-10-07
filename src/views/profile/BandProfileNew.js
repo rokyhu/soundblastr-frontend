@@ -94,7 +94,7 @@ function EventProfile() {
                       className="avatar border-gray"
                       src={image ? image : bandDefaultImage}
                     />
-                    <h5 className="name spaced-orange">
+                    <h5 className="title spaced-orange">
                       {name ? name : "Add event name"}
                     </h5>
                   </a>
@@ -105,6 +105,13 @@ function EventProfile() {
               </CardBody>
               <CardFooter>
                 <hr />
+                <div className="button-container d-flex even-spacing">
+                  {selectedGenres.map((genre, i) => (
+                    <div className="max30w simple-margin overflow-none" key={i}>
+                      <button className="button-cstm">{genre}</button>
+                    </div>
+                  ))}
+                </div>
               </CardFooter>
             </Card>
           </Col>
