@@ -186,7 +186,7 @@ function EventProfile() {
           <Col md="8">
             <Card className="card-user">
               <CardHeader>
-                <CardTitle tag="h5">Edit Details</CardTitle>
+                <CardTitle tag="h5">Add Event Profile</CardTitle>
               </CardHeader>
               <CardBody>
                 <Form onSubmit={saveNewEvent}>
