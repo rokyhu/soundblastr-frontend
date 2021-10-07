@@ -26,8 +26,10 @@ export const ApiRequestHandler = {
       });
   },
 
-  delete: (url, errorCallback) => {
-    axios.delete(url, ApiRequestHandler.assembleHeader()).catch((err) => {
+  delete: (url, callback, errorCallback) => {
+    axios.delete(url, ApiRequestHandler.assembleHeader())
+    .then(callback)
+    .catch((err) => {
       errorCallback(err.message);
     });
   },

@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Venue from "./Venue";
 import { backendRoutes } from "routes.js";
 import { ApiRequestHandler } from "ApiRequestHandler";
@@ -11,9 +11,14 @@ const Venues = (props) => {
   const [componentId, setComponentId] = useState("");
   const requestUrl = backendRoutes.venue.all;
 
+  const fetchData = useCallback(() => {
+    ApiRequestHandler.get(requestUrl, setVenues, setError);
+    setComponentId("");
+  }, [requestUrl]);
+
   useEffect(() => {
-    ApiRequestHandler.get(requestUrl, setVenues, setError)
-  }, [componentId, requestUrl]);
+      fetchData();
+  }, [fetchData]);
 
   const handleClick = (id) => {
     setComponentId(id);
@@ -46,7 +51,7 @@ const Venues = (props) => {
           )}
         </div>
       ) : (
-        <VenueDetail id={componentId} onChange={setComponentId} />
+        <VenueDetail id={componentId} onChange={setComponentId} fetchData={fetchData} />
       )}
     </>
   );

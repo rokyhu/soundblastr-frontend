@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Band from './Band';
 import { ApiRequestHandler } from "ApiRequestHandler";
 import { backendRoutes } from "routes.js";
@@ -12,9 +12,14 @@ const Bands = (props) => {
     const [componentId, setComponentId] = useState('');
     const requestUrl = backendRoutes.band.all;
 
-    useEffect(() => {
-      ApiRequestHandler.get(requestUrl, setCards, setError)
+    const fetchData = useCallback(() => {
+        ApiRequestHandler.get(requestUrl, setCards, setError);
+        setComponentId("");
     }, [requestUrl]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     const handleClick = (id) => {
       setComponentId(id);
@@ -46,7 +51,7 @@ const Bands = (props) => {
         )}
       </div>
       ) : (
-        <BandProfile id={componentId} onChange={setComponentId} />
+        <BandProfile id={componentId} onChange={setComponentId} fetchData={fetchData}  />
       )}
     </>
     );

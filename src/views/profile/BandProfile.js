@@ -1,8 +1,7 @@
 import React from "react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { backendRoutes } from "routes";
 import { ApiRequestHandler } from "ApiRequestHandler";
-import Multiselect from "multiselect-react-dropdown";
 
 import {
   Button,
@@ -22,7 +21,7 @@ import GenreSelection from "./GenreSelection";
 function BandProfile(props) {
 
   const requestUrl = (backendRoutes.band.base).concat(props.id);
-  const [triggerUpdate, setTriggerUpdate] = useState(false);
+  const fetchDataCallback = props.fetchData;
 
     const [band, setBand] = useState({
         name: null,
@@ -46,14 +45,18 @@ function BandProfile(props) {
             description: result.description,
           })
       }
+
+    const fetchData = useCallback(() => {
+        ApiRequestHandler.get(requestUrl, assembleBand, setError);
+    }, [requestUrl]);
+
     useEffect(() => {
-        ApiRequestHandler.get(requestUrl, assembleBand, setError)
-        }, [requestUrl, triggerUpdate]);
+        fetchData();
+    }, [fetchData]);
 
     const deleteEvent = (e) => {
-      e.preventDefault();
-      ApiRequestHandler.delete(requestUrl, setError);
-      props.onChange("");
+        e.preventDefault();
+        ApiRequestHandler.delete(requestUrl, fetchDataCallback, setError);
     };
 
     const updateBand = (e) => {
@@ -64,8 +67,7 @@ function BandProfile(props) {
         imageUrl: e.target.imageUrl.value,
         description: e.target.description.value,
       };
-      ApiRequestHandler.put(requestUrl, updatedBand, setError);
-      setTriggerUpdate(!triggerUpdate);
+      ApiRequestHandler.put(requestUrl, updatedBand, fetchData, setError);
     };
 
   return (
