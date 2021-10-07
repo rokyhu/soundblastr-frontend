@@ -57,6 +57,12 @@ function VenueDetail(props) {
         ApiRequestHandler.get(requestUrl, assembleVenue, setError)
         }, [requestUrl, triggerUpdate]);
 
+    const deleteEvent = (e) => {
+      e.preventDefault();
+      ApiRequestHandler.delete(requestUrl, setError);
+      props.onChange("");
+    };
+
     const updateVenue = (e) => {
       e.preventDefault();
       const updatedVenue = {
@@ -219,6 +225,14 @@ function VenueDetail(props) {
                         type="submit"
                       >
                         Update Venue
+                      </Button>
+                      <Button
+                        onClick={deleteEvent}
+                        className="btn-round"
+                        color="danger"
+                        type="submit"
+                      >
+                        Delete
                       </Button>
                     </div>
                   </Row>
