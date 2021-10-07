@@ -20,8 +20,9 @@ import GenreSelection from "./GenreSelection";
 
 function BandProfile(props) {
 
-  const requestUrl = (backendRoutes.band.base).concat(props.id);
+  const requestUrl = backendRoutes.band.base.concat(props.id);
   const fetchDataCallback = props.fetchData;
+  const [genresList, setGenresList] = useState([]);
 
     const [band, setBand] = useState({
         name: null,
@@ -39,7 +40,7 @@ function BandProfile(props) {
             name: result.name,
             genres: {
                 all: result.genreSelection.all,
-                selected:  result.genreSelection.all,
+                selected:  result.genreSelection.selected,
             },
             imageUrl: result.imageUrl,
             description: result.description,
@@ -61,9 +62,11 @@ function BandProfile(props) {
 
     const updateBand = (e) => {
       e.preventDefault();
+      const genres = [];
+      genresList.forEach(g => genres.push(g.tag))
       const updatedBand = {
         name: e.target.name.value,
-        genres: e.target.genres.value,
+        genres: genres,
         imageUrl: e.target.imageUrl.value,
         description: e.target.description.value,
       };
@@ -138,13 +141,7 @@ function BandProfile(props) {
                   <Col md="12">
                       <FormGroup>
                         <label>Genres</label>
-                        <GenreSelection genresAll={band.genres.all} genresSelected={band.genres.selected}/>
-                        {/* <Input
-                          defaultValue="genres"
-                          placeholder="url"
-                          type="text"
-                          name="imageUrl"
-                        /> */}
+                        <GenreSelection genresAll={band.genres.all} genresSelected={band.genres.selected} onClick={setGenresList}/>
                       </FormGroup>
                   </Col>
                   </Row>         

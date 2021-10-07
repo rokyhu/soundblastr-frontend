@@ -1,6 +1,7 @@
 import Multiselect from 'multiselect-react-dropdown';
 
 const GenreSelection = (props) => {
+    const saveSelected = props.onClick;
     
     const allGenres = props.genresAll.map( genre => ({
         tag: genre
@@ -9,16 +10,18 @@ const GenreSelection = (props) => {
     const selected = props.genresSelected.map((genre) => ({
         tag: genre
     }));
-   
-    
+
+    const passGenres = (e) => {
+        saveSelected(e);
+    };
 
     return (
         <Multiselect
                     customCloseIcon={<>❌</>}
                     displayValue="tag"
-                    onRemove={function noRefCheck(){}}
+                    onRemove={passGenres}
                     onSearch={function noRefCheck(){}}
-                    onSelect={function noRefCheck(){}}
+                    onSelect={passGenres}
                     options={allGenres}
                     selectedValues={selected}
         />  
