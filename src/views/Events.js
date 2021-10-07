@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect, useCallback } from "react";
 import Event from "./Event";
-import { Button } from "reactstrap";
 import EventProfile from "./EventProfile";
 import { ApiRequestHandler } from "ApiRequestHandler";
 import { backendRoutes } from "routes.js";
