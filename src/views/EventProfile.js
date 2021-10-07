@@ -110,7 +110,7 @@ function EventProfile(props) {
     ApiRequestHandler.delete(
       requestUrlSingleEvent,
       props.fetchData,
-      props.setError
+      setError
     );
   };
 

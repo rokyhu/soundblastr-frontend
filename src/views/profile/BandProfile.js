@@ -35,7 +35,6 @@ function BandProfile(props) {
         imageUrl: null,
         description: null,
     });
-    const [error, setError] = useState('');
 
     const refreshAfterDelete = () => {
       alert.success("Band successfully deleted!")
@@ -47,9 +46,8 @@ function BandProfile(props) {
     }
 
     const displayError = useCallback((e) => {
-      setError(e)
-      alert.error(error);
-    }, [alert, error])
+      alert.error(e);
+    }, [alert])
 
     const assembleBand = useCallback((result) => {
         setBand({
